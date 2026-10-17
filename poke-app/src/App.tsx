@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { pokemon, quests } from './data'
 import PokemonDetail, { PokemonArtwork } from './components/PokemonDetail'
 import './App.css'
+import CampusWelcome from './components/CampusWelcome'
 import gtLogo from './assets/gt-logo.png'
 
 type Profile = { name: string; handle: string; bio: string }
@@ -99,13 +100,29 @@ function App() {
         <div className="nav-label">YOUR ADVENTURE</div>
         <nav>
           <button
-            className={selected || tab === 'collection' ? 'active' : ''}
+            className={route === '#/welcome' ? 'active' : ''}
+            onClick={() => {
+              window.location.hash = '/welcome'
+            }}
+          >
+            <span>⌖</span> Campus Adventure
+          </button>
+          <button
+            className={
+              route !== '#/welcome' && (selected || tab === 'collection')
+                ? 'active'
+                : ''
+            }
             onClick={() => showAccount()}
           >
             <span>◈</span> Trainer Profile <i />
           </button>
           <button
-            className={!selected && tab === 'quests' ? 'active' : ''}
+            className={
+              route !== '#/welcome' && !selected && tab === 'quests'
+                ? 'active'
+                : ''
+            }
             onClick={() => showAccount('quests')}
           >
             <span>⚑</span> Side Quests <b>{quests.length}</b>
@@ -137,7 +154,11 @@ function App() {
           <div>
             <span className="breadcrumb">My Adventure</span>
             <span className="slash">/</span>
-            {selected ? selected.name : 'Trainer Profile'}
+            {route === '#/welcome'
+              ? 'Campus Adventure'
+              : selected
+                ? selected.name
+                : 'Trainer Profile'}
           </div>
           <div className="topbar-right">
             <span className="campus-status">
@@ -159,7 +180,9 @@ function App() {
               save them.
             </p>
           )}
-          {selected ? (
+          {route === '#/welcome' ? (
+            <CampusWelcome />
+          ) : selected ? (
             <>
               <div className="page-heading">
                 <div>
