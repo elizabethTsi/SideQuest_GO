@@ -1,62 +1,61 @@
+import { useRef, useState } from 'react'
 
-import { useRef, useState } from "react";
-
-const WORLD_SIZE = 2000;
+const WORLD_SIZE = 2000
 
 const quests = [
-  { id: 1, name: "Hidden Cafe", x: 350, y: 400 },
-  { id: 2, name: "Park Challenge", x: 1200, y: 700 },
-  { id: 3, name: "Secret Spot", x: 800, y: 1500 },
-];
+  { id: 1, name: 'Hidden Cafe', x: 350, y: 400 },
+  { id: 2, name: 'Park Challenge', x: 1200, y: 700 },
+  { id: 3, name: 'Secret Spot', x: 800, y: 1500 },
+]
 
-export default function MapPage() {
-  const viewportRef = useRef<HTMLDivElement>(null);
+type MapPageProps = {
+  onOpenProfile: () => void
+}
+
+export default function MapPage({ onOpenProfile }: MapPageProps) {
+  const viewportRef = useRef<HTMLDivElement>(null)
 
   const [position, setPosition] = useState({
     x: -700,
     y: -600,
-  });
+  })
 
   const dragStart = useRef({
     pointerX: 0,
     pointerY: 0,
     x: 0,
     y: 0,
-  });
+  })
 
-  function handlePointerDown(
-    e: React.PointerEvent<HTMLDivElement>
-  ) {
-    e.currentTarget.setPointerCapture(e.pointerId);
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    e.currentTarget.setPointerCapture(e.pointerId)
 
     dragStart.current = {
       pointerX: e.clientX,
       pointerY: e.clientY,
       x: position.x,
       y: position.y,
-    };
+    }
   }
 
-  function handlePointerMove(
-    e: React.PointerEvent<HTMLDivElement>
-  ) {
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
     if (!e.currentTarget.hasPointerCapture(e.pointerId)) {
-      return;
+      return
     }
 
-    const viewport = viewportRef.current;
-    if (!viewport) return;
+    const viewport = viewportRef.current
+    if (!viewport) return
 
-    const dx = e.clientX - dragStart.current.pointerX;
-    const dy = e.clientY - dragStart.current.pointerY;
+    const dx = e.clientX - dragStart.current.pointerX
+    const dy = e.clientY - dragStart.current.pointerY
 
-    const maxX = viewport.clientWidth - WORLD_SIZE;
-    const maxY = viewport.clientHeight - WORLD_SIZE;
+    const maxX = viewport.clientWidth - WORLD_SIZE
+    const maxY = viewport.clientHeight - WORLD_SIZE
 
     setPosition({
       x: Math.max(maxX, Math.min(0, dragStart.current.x + dx)),
       y: Math.max(maxY, Math.min(0, dragStart.current.y + dy)),
-    });
+    })
   }
 
   return (
@@ -101,14 +100,20 @@ export default function MapPage() {
       </div>
 
       {/* Fixed screen UI: does not move with the world */}
-      <div className="pointer-events-none absolute bottom-4 left-4 rounded-xl bg-white/90 px-3 py-2 shadow">
+      <div className="map-help pointer-events-none absolute bottom-4 left-4 rounded-xl bg-white/90 px-3 py-2 shadow">
         <p className="text-sm font-semibold text-slate-900">
           Explore your world
         </p>
-        <p className="text-xs text-slate-600">
-          Drag to look around
-        </p>
+        <p className="text-xs text-slate-600">Drag to look around</p>
       </div>
+      <button
+        className="map-profile-button"
+        onClick={onOpenProfile}
+        aria-label="Open trainer profile"
+        title="Trainer Profile"
+      >
+        <span aria-hidden="true">⚡</span>
+      </button>
     </div>
-  );
+  )
 }
