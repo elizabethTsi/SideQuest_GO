@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import NewPage from "./pages/newPage";
+import MapPage from "./pages/MapPage";
 import {
   Wifi,
   BatteryFull,
@@ -25,7 +25,7 @@ function App() {
         <div className="relative h-full w-full">
             
             {page === "home" && <Signin onContinue={() => setPage("map")} />}
-            {page === "map" && <NewPage />}
+            {page === "map" && <MapPage />}
           </div>
           <div className="absolute top-2 right-2 z-10 items-center">
             <div className="text-white flex flex-row items-center justify-center">
