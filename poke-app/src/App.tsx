@@ -19,7 +19,6 @@ const initialProfile = {
   handle: 'yellowjacket_24',
   bio: 'Chasing Pokémon between classes. Go Jackets! 🐝',
 }
-import { useState, useEffect } from "react";
 import {
   Wifi,
   BatteryFull,
