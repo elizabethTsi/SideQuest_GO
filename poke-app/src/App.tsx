@@ -1,58 +1,94 @@
-import { useState, useEffect } from "react";
-import MapPage from "./pages/MapPage";
-import {
-  Wifi,
-  BatteryFull,
-  Signal,
-} from "lucide-react";
-import Signin from "./pages/signin";
+import { useState, useEffect } from 'react'
+import MapPage from './pages/MapPage'
+import { Wifi, BatteryFull, Signal } from 'lucide-react'
+import Signin from './pages/signin'
+import Accounts from './accounts'
+import './App.css'
+import './phone.css'
+import './profile-navigation.css'
 
 function App() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState(new Date())
+  const [page, setPage] = useState('home')
+  const [route, setRoute] = useState(window.location.hash)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+    const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
 
-    return () => clearInterval(timer);
-  }, []);
+  useEffect(() => {
+    const onRouteChange = () => setRoute(window.location.hash)
+    window.addEventListener('hashchange', onRouteChange)
+    return () => window.removeEventListener('hashchange', onRouteChange)
+  }, [])
 
-  const [page, setPage] = useState("home");
+  const showingProfile =
+    page === 'map' && (route === '#/account' || route.startsWith('#/pokemon/'))
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7">
-        <div className="relative h-full w-full">
-            
-            {page === "home" && <Signin onContinue={() => setPage("map")} />}
-            {page === "map" && <MapPage />}
-          </div>
-          <div className="absolute top-2 right-2 z-10 items-center">
-            <div className="text-white flex flex-row items-center justify-center">
-              {/* Time */}
-              <div className="pr-3 text-sm">
-                {time.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
+      <div className="phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7">
+        <div className="relative h-full w-full min-h-0">
+          {page === 'home' && (
+            <Signin
+              onContinue={() => {
+                setPage('map')
+                window.location.hash = '/map'
+              }}
+            />
+          )}
+          {page === 'map' && (
+            <>
+              {/* Keep the map mounted so returning preserves the dragged position. */}
+              <div className="map-screen" hidden={showingProfile}>
+                <MapPage
+                  onOpenProfile={() => {
+                    window.location.hash = '/account'
+                  }}
+                />
+              </div>
+              {showingProfile && (
+                <section
+                  className="trainer-screen"
+                  aria-label="Trainer account"
+                >
+                  <div className="trainer-navigation">
+                    <a href="#/map">← Back to map</a>
+                  </div>
+                  <div className="trainer-content">
+                    <Accounts route={route} />
+                  </div>
+                </section>
+              )}
+            </>
+          )}
+        </div>
+        <div
+          className={`phone-status absolute top-2 right-2 z-10 items-center ${showingProfile ? 'phone-status-profile' : ''}`}
+        >
+          <div className="flex flex-row items-center justify-center">
+            <div className="pr-3 text-sm">
+              {time
+                .toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
                   hour12: true,
-                }).replace(/\s?[AP]M$/, "")}
-              </div>
-              {/* floating camera island */}
-              <div>
-                <div className="bg-black w-[130px] h-[30px] rounded-3xl"/>
-              </div>
-              {/* battery, wifi, bars  */}
-              <div className="pl-3">
-                <div className="flex text-white items-center gap-2">
-                  <Signal size={12} strokeWidth={2} />
-                  <Wifi size={12} strokeWidth={2} />
-                  <BatteryFull size={12} strokeWidth={2} />
-                </div>
+                })
+                .replace(/\s?[AP]M$/, '')}
+            </div>
+            <div className="bg-black w-[130px] h-[30px] rounded-3xl" />
+            <div className="pl-3">
+              <div className="flex items-center gap-2">
+                <Signal size={12} strokeWidth={2} />
+                <Wifi size={12} strokeWidth={2} />
+                <BatteryFull size={12} strokeWidth={2} />
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   )
 }
 
