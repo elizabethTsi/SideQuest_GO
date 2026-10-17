@@ -1,1 +1,67 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+:root {
+  font-family: 'DM Sans', sans-serif;
+  color: #1b2b3d;
+  background: #f7f8fa;
+  font-synthesis: none;
+  font-weight: 400;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a,
+select {
+  cursor: pointer;
+}
+button {
+  border: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #c69936;
+  outline-offset: 4px;
+}
+button {
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #b6964e;
+  outline-offset: 2px;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+button {
+  color: inherit;
+}
+button:hover {
+  filter: brightness(0.97);
+}
