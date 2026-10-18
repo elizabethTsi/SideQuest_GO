@@ -1,6 +1,5 @@
-
 import { useRef, useState } from 'react'
-import { MapPin, Compass } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import SideQuestModal from '../components/SideQuestModal'
 import PhotoUpload from '../components/PhotoUpload'
 import type { EncounterQuest } from '../catches'
@@ -232,8 +231,10 @@ const quests = [
   },
 ]
 
+import type { StartLoadingTransition } from '../hooks/useLoadingTransition'
 
 type MapPageProps = {
+  onTransition: StartLoadingTransition
   onOpenProfile: () => void
   onAcceptQuest: (quest: EncounterQuest) => void
 }
@@ -241,12 +242,15 @@ type MapPageProps = {
 export default function MapPage({
   onOpenProfile,
   onAcceptQuest,
+  onTransition,
 }: MapPageProps) {
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
   >(null)
 
   const [page, setPage] = useState<'map' | 'upload'>('map')
+  const [activeQuest, setActiveQuest] = useState<EncounterQuest | null>(null)
+  const encounterStarted = useRef(false)
   const viewportRef = useRef<HTMLDivElement>(null)
 
   const [zoom, setZoom] = useState(1)
@@ -313,10 +317,7 @@ export default function MapPage({
     const dy = e.clientY - dragStart.current.pointerY
 
     setPosition(
-      clampPosition(
-        dragStart.current.x + dx,
-        dragStart.current.y + dy,
-      ),
+      clampPosition(dragStart.current.x + dx, dragStart.current.y + dy),
     )
 
     // Rotate the compass based on the drag direction.
@@ -332,14 +333,24 @@ export default function MapPage({
     setCompassRotation(0)
   }
 
-  if (page === 'upload') {
+  if (page === 'upload' && activeQuest) {
     return (
       <PhotoUpload
-        onBack={() => setPage('map')}
-        onSubmit={(photo) => {
-          console.log('Photo selected:', photo)
-          // Add photo submission logic here.
-          setPage('map')
+        key={activeQuest.id}
+        onBack={() => {
+          onTransition('backToMap', () => {
+            setActiveQuest(null)
+            setPage('map')
+          })
+        }}
+        onSubmit={() => {
+          if (encounterStarted.current) return
+          encounterStarted.current = true
+          onTransition('photoToCatch', () => {
+            onAcceptQuest(activeQuest)
+            setActiveQuest(null)
+            setPage('map')
+          })
         }}
       />
     )
@@ -460,9 +471,13 @@ export default function MapPage({
         onAccept={() => {
           if (!selectedQuest) return
 
-          console.log('Accepted quest:', selectedQuest.title)
-          setSelectedQuest(null)
-          setPage('upload')
+          const quest = selectedQuest
+          onTransition('questToPhoto', () => {
+            setActiveQuest(quest)
+            encounterStarted.current = false
+            setSelectedQuest(null)
+            setPage('upload')
+          })
         }}
       />
     </div>

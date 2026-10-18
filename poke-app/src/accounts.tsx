@@ -325,8 +325,8 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                         <h3 className='uppercase'>{q.title}</h3>
                         <p>{q.description}</p>
                         <div className="flex flex-row  justify-around items-center">
-                          <small>{q.place}</small> 
-                          <b className='text-[8px] pt-2'>+{q.xp} XP</b> 
+                          <small>{q.place}</small>
+                          <b className='text-[8px] pt-2'>+{q.xp} XP</b>
                           </div>
                       </div>
                     </article>
