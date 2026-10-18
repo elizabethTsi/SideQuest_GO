@@ -32,7 +32,6 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
     return Array.isArray(f) ? f.filter((x) => typeof x === 'string') : []
   })
   const [tab, setTab] = useState('collection')
-  const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('all')
   const [sort, setSort] = useState('recent')
   const [editing, setEditing] = useState(false)
@@ -63,11 +62,7 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
   }
   const visible = pokemon
     .filter(
-      (p) =>
-        (filter !== 'favorites' || favorites.includes(p.id)) &&
-        `${p.name} ${p.types.join(' ')} ${p.location}`
-          .toLowerCase()
-          .includes(query.toLowerCase()),
+      (p) => filter !== 'favorites' || favorites.includes(p.id),
     )
     .sort((a, b) =>
       sort === 'cp'
@@ -161,7 +156,6 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
             </section>
             <section className="stats">
               <div>
-                <span className="stat-icon">◉</span>
                 <div>
                   <strong>{pokemon.length.toString().padStart(2, '0')}</strong>
                   <span>Pokémon Collected</span>
@@ -169,7 +163,6 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                 <small>GOTTA CATCH ’EM ALL</small>
               </div>
               <div>
-                <span className="stat-icon">⚑</span>
                 <div>
                   <strong>{quests.length.toString().padStart(2, '0')}</strong>
                   <span>Quests Completed</span>
@@ -177,7 +170,6 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                 <small>CURIOSITY PAYS OFF</small>
               </div>
               <div>
-                <span className="stat-icon">⌖</span>
                 <div>
                   <strong>
                     {new Set(pokemon.map((p) => p.location)).size
@@ -228,15 +220,6 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                       </button>
                     </div>
                     <div className="search-sort">
-                      <label className="search">
-                        <span>⌕</span>
-                        <input
-                          value={query}
-                          onChange={(e) => setQuery(e.target.value)}
-                          placeholder="Find a Pokémon…"
-                          aria-label="Search Pokémon"
-                        />
-                      </label>
                       <select
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
@@ -309,12 +292,11 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                       <span>⌕</span>
                       <h3>No Pokémon found</h3>
                       <p>
-                        Try another search or star a Pokémon to add a favorite.
+                        Star a Pokémon in your collection to add a favorite.
                       </p>
                       <button
                         className="outline-button"
                         onClick={() => {
-                          setQuery('')
                           setFilter('all')
                         }}
                       >
@@ -323,7 +305,9 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                     </div>
                   )}
                   <p className="collection-foot">
-                    <span>KEEP EXPLORING ↗</span>
+                    <a className="keep-exploring-link" href="#/map">
+                      KEEP EXPLORING ↗
+                    </a>
                   </p>
                 </div>
               ) : (

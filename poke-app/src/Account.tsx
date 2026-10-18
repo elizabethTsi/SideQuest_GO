@@ -15,8 +15,8 @@ function readSaved<T>(key: string, fallback: T): T {
   }
 }
 const initialProfile = {
-  name: 'Alex Morgan',
-  handle: 'yellowjacket_24',
+  name: 'Alexis',
+  handle: 'techstudent',
   bio: 'Chasing Pokémon between classes. Go Jackets! 🐝',
 }
 function App() {

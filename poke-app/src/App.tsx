@@ -15,6 +15,7 @@ import {
 import './App.css'
 import './phone.css'
 import './profile-navigation.css'
+import './trainer-theme.css'
 
 function App() {
   const [time, setTime] = useState(new Date())
@@ -63,7 +64,7 @@ function App() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7">
+      <div className={`phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7 ${showingProfile ? 'trainer-theme' : ''}`}>
         <div className="relative h-full w-full min-h-0">
           {page === 'home' && (
             <Signin

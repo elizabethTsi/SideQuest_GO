@@ -234,7 +234,7 @@ export default function CatchEncounter({
             <span className="catch-success-label">NEW CAMPUS COMPANION</span>
             {!imageFailed && <img src={pokemon.image} alt={pokemon.name} />}
             <h2 id="catch-success-title" ref={successRef} tabIndex={-1}>
-              Gotcha!
+              GOTCHA!
             </h2>
             <p>
               You caught <strong>{pokemon.name}</strong>.
