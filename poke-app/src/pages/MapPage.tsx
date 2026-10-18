@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { MapPin } from 'lucide-react'
 import SideQuestModal from '../components/SideQuestModal'
-import PhotoUpload from "../components/PhotoUpload";
+import PhotoUpload from '../components/PhotoUpload'
 
 const WORLD_WIDTH = 5600 / 2
 const WORLD_HEIGHT = 4320 / 2
@@ -56,7 +56,10 @@ export default function MapPage({
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
   >(null)
-  const [page, setPage] = useState<"map" | "upload">("map");
+  const [page, setPage] = useState<'map' | 'upload'>('map')
+  const [activeQuest, setActiveQuest] = useState<EncounterQuest | null>(null)
+  const [photoStep, setPhotoStep] = useState<1 | 2>(1)
+  const encounterStarted = useRef(false)
   const viewportRef = useRef<HTMLDivElement>(null)
 
   const [zoom, setZoom] = useState(1)
@@ -131,18 +134,31 @@ export default function MapPage({
     setPosition(clampPosition(-700, -600, 1))
   }
 
-  if (page === "upload") {
-  return (
-    <PhotoUpload
-      onBack={() => setPage("map")}
-      onSubmit={(photo) => {
-        console.log("Photo selected:", photo);
-        // Add photo submission logic here.
-        setPage("map");
-      }}
-    />
-  );
-}
+  if (page === 'upload' && activeQuest) {
+    return (
+      <PhotoUpload
+        key={`${activeQuest.id}-${photoStep}`}
+        step={photoStep}
+        onBack={() => {
+          setActiveQuest(null)
+          setPhotoStep(1)
+          setPage('map')
+        }}
+        onSubmit={() => {
+          if (encounterStarted.current) return
+          if (photoStep === 1) {
+            setPhotoStep(2)
+            return
+          }
+          encounterStarted.current = true
+          onAcceptQuest(activeQuest)
+          setActiveQuest(null)
+          setPhotoStep(1)
+          setPage('map')
+        }}
+      />
+    )
+  }
 
   return (
     <div
@@ -177,7 +193,7 @@ export default function MapPage({
             style={{ left: quest.x, top: quest.y }}
             aria-label={`Open quest: ${quest.title}`}
           >
-            <MapPin className='text-yellow-300 my-1'/>
+            <MapPin className="text-yellow-300 my-1" />
           </button>
         ))}
       </div>
@@ -216,8 +232,6 @@ export default function MapPage({
         </div>
       </div>
 
-     
-
       {/* Profile button */}
       <button
         className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl shadow-lg"
@@ -241,11 +255,13 @@ export default function MapPage({
         }}
         onClose={() => setSelectedQuest(null)}
         onAccept={() => {
-          if (!selectedQuest) return;
+          if (!selectedQuest) return
 
-          console.log("Accepted quest:", selectedQuest.title);
-          setSelectedQuest(null);
-          setPage("upload");
+          setActiveQuest(selectedQuest)
+          setPhotoStep(1)
+          encounterStarted.current = false
+          setSelectedQuest(null)
+          setPage('upload')
         }}
       />
     </div>
