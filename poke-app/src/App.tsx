@@ -3,6 +3,15 @@ import MapPage from './pages/MapPage'
 import { Wifi, BatteryFull, Signal } from 'lucide-react'
 import Signin from './pages/signin'
 import Accounts from './accounts'
+import CatchEncounter from './components/CatchEncounter'
+import { pokemon } from './data'
+import {
+  CATCHES_KEY,
+  readCatches,
+  caughtPokemon,
+  createEncounter,
+  type EncounterQuest,
+} from './catches'
 import './App.css'
 import './phone.css'
 import './profile-navigation.css'
@@ -11,6 +20,32 @@ function App() {
   const [time, setTime] = useState(new Date())
   const [page, setPage] = useState('home')
   const [route, setRoute] = useState(window.location.hash)
+  const [catches, setCatches] = useState(readCatches)
+  const [encounter, setEncounter] = useState<
+    (ReturnType<typeof createEncounter> & { questTitle: string }) | null
+  >(null)
+  const collection = [...catches.map(caughtPokemon).reverse(), ...pokemon]
+  const showingEncounter =
+    page === 'map' && route === '#/catch' && encounter !== null
+
+  function acceptQuest(quest: EncounterQuest) {
+    setEncounter({ ...createEncounter(quest), questTitle: quest.title })
+    window.location.hash = '/catch'
+  }
+
+  function saveCatch() {
+    if (!encounter) return false
+    const next = catches.some((record) => record.id === encounter.record.id)
+      ? catches
+      : [...catches, encounter.record]
+    setCatches(next)
+    try {
+      localStorage.setItem(CATCHES_KEY, JSON.stringify(next))
+      return true
+    } catch {
+      return false
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
@@ -41,13 +76,29 @@ function App() {
           {page === 'map' && (
             <>
               {/* Keep the map mounted so returning preserves the dragged position. */}
-              <div className="map-screen" hidden={showingProfile}>
+              <div
+                className="map-screen"
+                hidden={showingProfile || showingEncounter}
+              >
                 <MapPage
+                  onAcceptQuest={acceptQuest}
                   onOpenProfile={() => {
                     window.location.hash = '/account'
                   }}
                 />
               </div>
+              {showingEncounter && (
+                <CatchEncounter
+                  key={encounter.record.id}
+                  pokemon={encounter.pokemon}
+                  questTitle={encounter.questTitle}
+                  onCatch={saveCatch}
+                  onLeave={(destination) => {
+                    setEncounter(null)
+                    window.location.hash = destination
+                  }}
+                />
+              )}
               {showingProfile && (
                 <section
                   className="trainer-screen"
@@ -57,7 +108,7 @@ function App() {
                     <a href="#/map">← Back to map</a>
                   </div>
                   <div className="trainer-content">
-                    <Accounts route={route} />
+                    <Accounts route={route} pokemon={collection} />
                   </div>
                 </section>
               )}

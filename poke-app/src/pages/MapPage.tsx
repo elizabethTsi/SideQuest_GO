@@ -1,19 +1,19 @@
-import { useRef, useState } from "react";
-import { MapPin } from "lucide-react";
-import SideQuestModal from "../components/SideQuestModal";
+import { useRef, useState } from 'react'
+import { MapPin } from 'lucide-react'
+import SideQuestModal from '../components/SideQuestModal'
 
-const WORLD_WIDTH = 5600 / 2;
-const WORLD_HEIGHT = 4320 / 2;
+const WORLD_WIDTH = 5600 / 2
+const WORLD_HEIGHT = 4320 / 2
 
 const quests = [
   {
     id: 1,
-    title: "Find Buzz and Take a Photo",
+    title: 'Find Buzz and Take a Photo',
     description:
-      "Find Buzz and take a photo together to complete this campus challenge!",
-    difficulty: "Easy",
-    reward: "50 XP",
-    location: "Georgia Tech Campus",
+      'Find Buzz and take a photo together to complete this campus challenge!',
+    difficulty: 'Easy',
+    reward: '50 XP',
+    location: 'Georgia Tech Campus',
     x: 1685,
     y: 1430,
   },
@@ -22,109 +22,112 @@ const quests = [
     title: "Buy Coffee from Kaldi's Coffee",
     description:
       "Visit Kaldi's Coffee and buy a coffee to complete this caffeine-fueled side quest.",
-    difficulty: "Easy",
-    reward: "75 XP",
+    difficulty: 'Easy',
+    reward: '75 XP',
     location: "Kaldi's Coffee",
     x: 1845,
     y: 1495,
   },
   {
     id: 3,
-    title: "Take an Exercise Class at the CRC",
+    title: 'Take an Exercise Class at the CRC',
     description:
-      "Head to the Campus Recreation Center and take an exercise class to complete this fitness challenge.",
-    difficulty: "Medium",
-    reward: "100 XP",
-    location: "Campus Recreation Center (CRC)",
+      'Head to the Campus Recreation Center and take an exercise class to complete this fitness challenge.',
+    difficulty: 'Medium',
+    reward: '100 XP',
+    location: 'Campus Recreation Center (CRC)',
     x: 545,
     y: 1210,
   },
-];
+]
+
+import type { EncounterQuest } from '../catches'
 
 type MapPageProps = {
-  onOpenProfile: () => void;
-};
+  onOpenProfile: () => void
+  onAcceptQuest: (quest: EncounterQuest) => void
+}
 
-export default function MapPage({ onOpenProfile }: MapPageProps) {
+export default function MapPage({
+  onOpenProfile,
+  onAcceptQuest,
+}: MapPageProps) {
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
-  >(null);
+  >(null)
 
-  const viewportRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null)
 
-  const [zoom, setZoom] = useState(1);
-  const [position, setPosition] = useState({ x: -700, y: -600 });
+  const [zoom, setZoom] = useState(1)
+  const [position, setPosition] = useState({ x: -700, y: -600 })
 
   const dragStart = useRef({
     pointerX: 0,
     pointerY: 0,
     x: 0,
     y: 0,
-  });
+  })
 
   function clampPosition(x: number, y: number, scale = zoom) {
-    const viewport = viewportRef.current;
+    const viewport = viewportRef.current
 
-    if (!viewport) return { x, y };
+    if (!viewport) return { x, y }
 
-    const minX = Math.min(0, viewport.clientWidth - WORLD_WIDTH * scale);
-    const minY = Math.min(0, viewport.clientHeight - WORLD_HEIGHT * scale);
+    const minX = Math.min(0, viewport.clientWidth - WORLD_WIDTH * scale)
+    const minY = Math.min(0, viewport.clientHeight - WORLD_HEIGHT * scale)
 
     return {
       x: Math.max(minX, Math.min(0, x)),
       y: Math.max(minY, Math.min(0, y)),
-    };
+    }
   }
 
   function changeZoom(nextZoom: number) {
-    const newZoom = Math.max(0.5, Math.min(3, nextZoom));
-    const viewport = viewportRef.current;
+    const newZoom = Math.max(0.5, Math.min(3, nextZoom))
+    const viewport = viewportRef.current
 
-    if (!viewport) return;
+    if (!viewport) return
 
-    const centerX = viewport.clientWidth / 2;
-    const centerY = viewport.clientHeight / 2;
+    const centerX = viewport.clientWidth / 2
+    const centerY = viewport.clientHeight / 2
 
-    const worldX = (centerX - position.x) / zoom;
-    const worldY = (centerY - position.y) / zoom;
+    const worldX = (centerX - position.x) / zoom
+    const worldY = (centerY - position.y) / zoom
 
-    const nextX = centerX - worldX * newZoom;
-    const nextY = centerY - worldY * newZoom;
+    const nextX = centerX - worldX * newZoom
+    const nextY = centerY - worldY * newZoom
 
-    setZoom(newZoom);
-    setPosition(clampPosition(nextX, nextY, newZoom));
+    setZoom(newZoom)
+    setPosition(clampPosition(nextX, nextY, newZoom))
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if ((e.target as HTMLElement).closest("button")) return;
+    if ((e.target as HTMLElement).closest('button')) return
 
-    e.currentTarget.setPointerCapture(e.pointerId);
+    e.currentTarget.setPointerCapture(e.pointerId)
 
     dragStart.current = {
       pointerX: e.clientX,
       pointerY: e.clientY,
       x: position.x,
       y: position.y,
-    };
+    }
   }
 
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
+    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
 
-    const dx = e.clientX - dragStart.current.pointerX;
-    const dy = e.clientY - dragStart.current.pointerY;
+    const dx = e.clientX - dragStart.current.pointerX
+    const dy = e.clientY - dragStart.current.pointerY
 
     setPosition(
-      clampPosition(
-        dragStart.current.x + dx,
-        dragStart.current.y + dy
-      )
-    );
+      clampPosition(dragStart.current.x + dx, dragStart.current.y + dy),
+    )
   }
 
   function resetMap() {
-    setZoom(1);
-    setPosition(clampPosition(-700, -600, 1));
+    setZoom(1)
+    setPosition(clampPosition(-700, -600, 1))
   }
 
   return (
@@ -141,7 +144,7 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
           width: WORLD_WIDTH,
           height: WORLD_HEIGHT,
           transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-          transformOrigin: "top left",
+          transformOrigin: 'top left',
         }}
       >
         <img
@@ -222,20 +225,20 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
         isOpen={selectedQuest !== null}
         quest={{
           id: selectedQuest?.id ?? 0,
-          name: selectedQuest?.title ?? "",
-          description: selectedQuest?.description ?? "",
-          difficulty: selectedQuest?.difficulty ?? "",
-          reward: selectedQuest?.reward ?? "",
-          location: selectedQuest?.location ?? "",
+          name: selectedQuest?.title ?? '',
+          description: selectedQuest?.description ?? '',
+          difficulty: selectedQuest?.difficulty ?? '',
+          reward: selectedQuest?.reward ?? '',
+          location: selectedQuest?.location ?? '',
         }}
         onClose={() => setSelectedQuest(null)}
         onAccept={() => {
-          if (!selectedQuest) return;
+          if (!selectedQuest) return
 
-          console.log("Accepted quest:", selectedQuest.title);
-          setSelectedQuest(null);
+          onAcceptQuest(selectedQuest)
+          setSelectedQuest(null)
         }}
       />
     </div>
-  );
+  )
 }

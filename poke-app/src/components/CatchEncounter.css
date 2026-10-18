@@ -1,0 +1,315 @@
+.catch-screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 42%, #487d70, #102d38 75%);
+  color: white;
+  isolation: isolate;
+}
+.catch-video,
+.catch-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.catch-shade {
+  background: linear-gradient(#0a202dbb, transparent 45%, #0a202dbb);
+}
+.catch-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 44px 12px 0;
+}
+.catch-header button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff24;
+  color: white;
+  font-size: 22px;
+}
+.catch-header > span {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.catch-name {
+  position: absolute;
+  top: 17%;
+  width: 100%;
+  text-align: center;
+  padding: 0 15px;
+}
+.catch-name small {
+  font-size: 9px;
+  display: block;
+  opacity: 0.8;
+}
+.catch-name h2 {
+  font:
+    600 27px Outfit,
+    sans-serif;
+  margin: 5px 0;
+}
+.catch-name > span {
+  font-size: 10px;
+}
+.catch-target {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+.catch-target img {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 9px #0005);
+}
+.catch-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #ffffffb0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 12px #ffffff08;
+}
+.catch-ring::after {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border: 2px solid #abe5aa;
+  border-radius: 50%;
+  animation: aim-pulse 2s ease-in-out infinite;
+}
+.catch-impact {
+  position: absolute;
+  font-size: 100px;
+  color: #ffdf7c;
+  opacity: 0;
+}
+.catch-hint {
+  position: absolute;
+  top: 65%;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  padding: 0 15px;
+}
+.throw-ball {
+  position: absolute;
+  top: 80%;
+  left: calc(50% - 25px);
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  border: 2px solid #152938;
+  border-radius: 50%;
+  background: linear-gradient(#ef5c54 0 44%, #243542 44% 54%, #fff 54%);
+  box-shadow:
+    0 8px 16px #0005,
+    inset -5px -5px 0 #0001;
+  touch-action: none;
+  user-select: none;
+  z-index: 2;
+}
+.throw-ball:disabled {
+  cursor: default;
+}
+.ball-center {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  border: 4px solid #243542;
+  border-radius: 50%;
+}
+.throw-guide {
+  position: absolute;
+  top: 87%;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  opacity: 0.6;
+}
+.catch-throwing .throw-ball {
+  animation: ball-flight 1.6s ease-in-out forwards;
+}
+.catch-throwing .catch-target img,
+.catch-throwing .catch-image-fallback {
+  animation: capture-shrink 0.35s 0.8s forwards;
+}
+.catch-throwing .catch-ring {
+  animation: capture-shrink 0.3s 0.8s forwards;
+}
+.catch-throwing .catch-impact {
+  animation: impact-flash 0.5s 0.75s both;
+}
+.catch-throwing .throw-guide {
+  display: none;
+}
+.camera-notice {
+  position: absolute;
+  z-index: 4;
+  top: 32%;
+  left: 12px;
+  right: 12px;
+  border: 1px solid #ffffff30;
+  border-radius: 15px;
+  background: #142e3af2;
+  padding: 22px 16px;
+  text-align: center;
+}
+.camera-notice h3 {
+  font-size: 18px;
+}
+.camera-notice p {
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 10px 0;
+}
+.camera-notice button {
+  display: block;
+  width: 100%;
+  background: #e7d69d;
+  color: #183143;
+  border-radius: 7px;
+  padding: 10px;
+  margin-top: 8px;
+  font-size: 10px;
+}
+.catch-success {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  padding: 18px 12px;
+  background: #102536a6;
+  overflow-y: auto;
+}
+.catch-success-card {
+  background: #fffdf7;
+  color: #173343;
+  border: 1px solid #e5d7b1;
+  border-radius: 20px;
+  width: 100%;
+  padding: 22px 15px 14px;
+  text-align: center;
+  box-shadow: 0 18px 40px #0003;
+  animation: success-in 0.4s ease-out;
+}
+.catch-success-label {
+  font-size: 7px;
+  letter-spacing: 1.3px;
+  color: #a58845;
+}
+.catch-success-card img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  display: block;
+  margin: 12px auto;
+}
+.catch-success-card h2 {
+  font:
+    600 32px Outfit,
+    sans-serif;
+}
+.catch-success-card p {
+  font-size: 12px;
+  margin: 5px 0 8px;
+}
+.catch-success-card small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #80908f;
+  margin-bottom: 18px;
+}
+.catch-success-card button {
+  display: block;
+  width: 100%;
+  padding: 11px 7px;
+  border: 1px solid #dbe2e3;
+  border-radius: 8px;
+  font-size: 11px;
+  background: white;
+  margin-top: 8px;
+}
+.catch-success-card .catch-primary {
+  background: #173343;
+  color: #eddbac;
+  border-color: #173343;
+}
+.catch-success-card .catch-back {
+  border: 0;
+  color: #83938f;
+  background: none;
+  font-size: 9px;
+}
+@keyframes aim-pulse {
+  50% {
+    transform: scale(0.78);
+    opacity: 0.5;
+  }
+}
+@keyframes ball-flight {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  35% {
+    transform: translate(22px, calc(var(--throw-y) * 0.7 - 45px)) scale(0.8)
+      rotate(140deg);
+  }
+  52% {
+    transform: translate(0, var(--throw-y)) scale(0.5) rotate(300deg);
+  }
+  72% {
+    transform: translate(0, var(--throw-y)) scale(0.55) rotate(340deg);
+  }
+  85% {
+    transform: translate(0, var(--throw-y)) scale(0.55) rotate(380deg);
+  }
+  100% {
+    transform: translate(0, var(--throw-y)) scale(0.55) rotate(360deg);
+  }
+}
+@keyframes capture-shrink {
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+@keyframes impact-flash {
+  30% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+@keyframes success-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catch-screen *,
+  .catch-screen *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
