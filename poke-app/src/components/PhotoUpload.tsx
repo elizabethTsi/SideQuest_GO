@@ -1,48 +1,54 @@
-import { useRef, useState } from "react";
-import { ImagePlus, Upload, X, Check, ArrowLeft } from "lucide-react";
+import { useEffect, useRef, useState } from 'react'
+import { ImagePlus, Upload, X, Check, ArrowLeft } from 'lucide-react'
 
 type PhotoUploadProps = {
-  onBack: () => void;
-  onSubmit: (photo: File) => void;
-};
+  onBack: () => void
+  onSubmit: (photo: File) => void
+}
 
 export default function PhotoUpload({
   onBack,
   onSubmit,
 }: PhotoUploadProps) {
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [photo, setPhoto] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [error, setError] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview)
+    }
+  }, [preview])
 
   function handlePhotoChange(file?: File) {
-    if (!file) return;
+    if (!file) return
 
-    if (!file.type.startsWith("image/")) {
-      setError("Please choose an image file.");
-      return;
+    if (!file.type.startsWith('image/')) {
+      setError('Please choose an image file.')
+      return
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError("Your photo must be smaller than 10 MB.");
-      return;
+      setError('Your photo must be smaller than 10 MB.')
+      return
     }
 
-    if (preview) URL.revokeObjectURL(preview);
+    if (preview) URL.revokeObjectURL(preview)
 
-    setPhoto(file);
-    setPreview(URL.createObjectURL(file));
-    setError("");
+    setPhoto(file)
+    setPreview(URL.createObjectURL(file))
+    setError('')
   }
 
   function removePhoto() {
-    if (preview) URL.revokeObjectURL(preview);
+    if (preview) URL.revokeObjectURL(preview)
 
-    setPhoto(null);
-    setPreview(null);
-    setError("");
+    setPhoto(null)
+    setPreview(null)
+    setError('')
 
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) inputRef.current.value = ''
   }
 
   return (
@@ -52,25 +58,21 @@ export default function PhotoUpload({
         <button
           type="button"
           onClick={onBack}
-    style={{ fontSize: "10px" }}
+          style={{ fontSize: '10px' }}
           className="flex items-center gap-1 rounded-lg py-2 pr-2 text-xs font-medium text-slate-600 transition hover:text-blue-950"
         >
           <ArrowLeft size={17} />
           Back
         </button>
-
       </div>
 
       {/* Heading */}
       <div className="mb-2 mt-5 shrink-0">
         <div className="mb-2 inline-flex rounded-full px-3 py-1">
-          <span className="text-[16px] font-semibold uppercase tracking-widest text-">
+          <span className="text-[16px] font-semibold uppercase tracking-widest">
             Quest verification
           </span>
         </div>
-
-
-      
       </div>
 
       {/* Hidden file input */}
@@ -80,9 +82,7 @@ export default function PhotoUpload({
         accept="image/*"
         capture="environment"
         className="hidden"
-        onChange={(event) =>
-          handlePhotoChange(event.target.files?.[0])
-        }
+        onChange={(event) => handlePhotoChange(event.target.files?.[0])}
       />
 
       {/* Photo upload card */}
@@ -160,18 +160,18 @@ export default function PhotoUpload({
           type="button"
           disabled={!photo}
           onClick={() => {
-            if (photo) onSubmit(photo);
+            if (photo) onSubmit(photo)
           }}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-300"
         >
           <Upload size={17} />
-          Submit photo
+          Submit photo & catch
         </button>
 
         <p className="mt-3 text-center text-[10px] leading-4 text-slate-400">
-          Your photo will be submitted for quest verification.
+          A photo submission is required to start the catch encounter.
         </p>
       </div>
     </div>
-  );
+  )
 }
