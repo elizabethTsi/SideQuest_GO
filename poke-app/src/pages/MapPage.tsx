@@ -10,16 +10,15 @@ const quests = [
   { id: 3, name: "Secret Spot", x: 800, y: 1500 },
 ];
 
-export default function MapPage() {
+type MapPageProps = {
+  onOpenProfile: () => void;
+};
+
+export default function MapPage({ onOpenProfile }: MapPageProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  // Hooks must be inside the component
   const [zoom, setZoom] = useState(1);
-
-  const [position, setPosition] = useState({
-    x: -700,
-    y: -600,
-  });
+  const [position, setPosition] = useState({ x: -700, y: -600 });
 
   const dragStart = useRef({
     pointerX: 0,
@@ -30,6 +29,7 @@ export default function MapPage() {
 
   function clampPosition(x: number, y: number, scale = zoom) {
     const viewport = viewportRef.current;
+
     if (!viewport) return { x, y };
 
     const minX = Math.min(0, viewport.clientWidth - WORLD_WIDTH * scale);
@@ -43,12 +43,11 @@ export default function MapPage() {
 
   function changeZoom(nextZoom: number) {
     const newZoom = Math.max(0.5, Math.min(3, nextZoom));
-    setZoom(newZoom);
-
-    // Keep the current view centered while zooming
     const viewport = viewportRef.current;
+
     if (!viewport) return;
 
+    // Zoom toward the center of the visible screen
     const centerX = viewport.clientWidth / 2;
     const centerY = viewport.clientHeight / 2;
 
@@ -58,11 +57,12 @@ export default function MapPage() {
     const nextX = centerX - worldX * newZoom;
     const nextY = centerY - worldY * newZoom;
 
+    setZoom(newZoom);
     setPosition(clampPosition(nextX, nextY, newZoom));
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    // Only drag when the background/world is clicked
+    // Don't start dragging when interacting with a quest marker
     if ((e.target as HTMLElement).closest("button")) return;
 
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -89,12 +89,17 @@ export default function MapPage() {
     );
   }
 
+  function resetMap() {
+    setZoom(1);
+    setPosition(clampPosition(-700, -600, 1));
+  }
+
   return (
     <div
       ref={viewportRef}
       className="relative h-full w-full overflow-hidden rounded-3xl bg-slate-200 touch-none"
     >
-      {/* Moving world: background and markers zoom together */}
+      {/* Moving world */}
       <div
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -132,6 +137,7 @@ export default function MapPage() {
           type="button"
           onClick={() => changeZoom(zoom + 0.25)}
           className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
+          aria-label="Zoom in"
         >
           +
         </button>
@@ -140,17 +146,16 @@ export default function MapPage() {
           type="button"
           onClick={() => changeZoom(zoom - 0.25)}
           className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
+          aria-label="Zoom out"
         >
           −
         </button>
 
         <button
           type="button"
-          onClick={() => {
-            setZoom(1);
-            setPosition({ x: -700, y: -600 });
-          }}
+          onClick={resetMap}
           className="flex h-8 w-12 items-center justify-center rounded-xl bg-white text-sm font-bold text-slate-900 shadow-lg"
+          aria-label="Reset map"
         >
           1:1
         </button>
@@ -160,13 +165,23 @@ export default function MapPage() {
         </div>
       </div>
 
-      {/* Fixed screen UI */}
+      {/* Fixed help text */}
       <div className="pointer-events-none absolute bottom-4 left-4 z-40 rounded-xl bg-white/90 px-3 py-2 shadow">
         <p className="text-sm font-semibold text-slate-900">
           Explore your world
         </p>
         <p className="text-xs text-slate-600">Drag to look around</p>
       </div>
+
+      {/* Fixed profile button */}
+      <button
+        className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl shadow-lg"
+        onClick={onOpenProfile}
+        aria-label="Open trainer profile"
+        title="Trainer Profile"
+      >
+        <span aria-hidden="true">⚡</span>
+      </button>
     </div>
   );
 }
