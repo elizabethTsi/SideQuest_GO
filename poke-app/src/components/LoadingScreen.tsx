@@ -24,7 +24,6 @@ export default function LoadingScreen({
       aria-live="polite"
     >
       <img src={image} alt="" />
-      <span className="route-loading-label">Loading…</span>
     </div>
   )
 }
