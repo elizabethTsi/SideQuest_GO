@@ -65,10 +65,10 @@ function App() {
           )}
         </div>
         <div
-          className={`phone-status absolute top-2 right-2 z-10 items-center ${showingProfile ? 'phone-status-profile' : ''}`}
+          className={`phone-status absolute top-2 inset-x-0 z-10 ${showingProfile ? 'phone-status-profile' : ''}`}
         >
-          <div className="flex flex-row items-center justify-center">
-            <div className="pr-3 text-sm">
+          <div className="phone-status-row">
+            <div className="phone-status-time">
               {time
                 .toLocaleTimeString('en-US', {
                   hour: 'numeric',
@@ -77,9 +77,9 @@ function App() {
                 })
                 .replace(/\s?[AP]M$/, '')}
             </div>
-            <div className="bg-black w-[130px] h-[30px] rounded-3xl" />
-            <div className="pl-3">
-              <div className="flex items-center gap-2">
+            <div className="phone-status-island" aria-hidden="true" />
+            <div className="phone-status-icons">
+              <div className="flex items-center gap-1">
                 <Signal size={12} strokeWidth={2} />
                 <Wifi size={12} strokeWidth={2} />
                 <BatteryFull size={12} strokeWidth={2} />
