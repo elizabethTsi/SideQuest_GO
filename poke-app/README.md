@@ -57,6 +57,12 @@ The standalone component can also receive data from an API:
 
 ### Account integration
 
-This is a front-end preview, not an authentication system. The trainer and collected Pokémon/quest history are sample data. Name, handle, biography and favorites persist in localStorage on this browser. Replace the arrays in `src/data.ts` and the profile/localStorage state in `src/App.tsx` with your authenticated user's API data when connecting a backend. Level and XP are sample values. Quest history is read-only; this UI does not award completion or verify campus visits.
+This is a front-end preview, not an authentication system. The trainer and collected Pokémon/quest history are sample data. Name, handle, biography and favorites persist in localStorage on this browser. Replace the arrays in `src/data.ts` and the profile/localStorage state in `src/accounts.tsx` with your authenticated user's API data when connecting a backend. Level and XP are sample values. Quest history is read-only; this UI does not award completion or verify campus visits.
 
 Pokémon artwork is loaded from PokeAPI's public sprite repository; fonts are loaded from Google Fonts. An internet connection is needed for these assets. Artwork failures display a fallback message.
+
+## Phone preview
+
+The app is contained in a single 71.5 mm × 147.6 mm phone frame, reduced to fit smaller browser windows. `src/App.tsx` owns this frame and hash navigation; `src/accounts.tsx` contains the trainer profile, collection, completed quests, Pokémon details, and profile editing. `src/phone.css` styles these views for the phone width independently of browser width.
+
+The default screen (`#/welcome`) displays the campus image. Use the temporary Open Trainer Profile button or bottom navigation to switch to `#/account`. Account content scrolls inside the phone, and Pokémon cards open their details in the same frame.
