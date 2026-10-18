@@ -12,9 +12,9 @@ function readSaved<T>(key: string, fallback: T): T {
   }
 }
 const initialProfile = {
-  name: 'Alex Morgan',
-  handle: 'yellowjacket_24',
-  bio: 'Chasing Pokémon between classes. Go Jackets! 🐝',
+  name: 'Alexis Tan',
+  handle: 'alex_jono_tan',
+  bio: 'Chasing Random fun facts between classes. Go Jackets! 🐝',
 }
 
 function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
@@ -107,16 +107,13 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
             <div className="page-heading">
               <div>
                 <h1>
-                  Trainer Profile<span className="gold">.</span>
+                  Profile
                 </h1>
               </div>
-              <span className="edition">RAMBLIN’ · ROAMING · COLLECTING</span>
             </div>
             <section className="profile-card">
               <div className="profile-banner">
                 <div className="banner-grid" />
-                <span className="banner-word">GO JACKETS!</span>
-                <span className="banner-tag">GEORGIA TECH EXPLORERS CLUB</span>
                 <div className="orbit o1" />
                 <div className="orbit o2" />
               </div>
@@ -127,7 +124,7 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                 </div>
                 <div className="profile-copy">
                   <div className="name-row">
-                    <h2>{profile.name}</h2>
+                    <h2>Alexis Tan</h2>
                     <button
                       className="outline-button edit-profile-button"
                       onClick={() => setEditing(true)}
@@ -154,7 +151,7 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                 </span>
               </div>
             </section>
-            <section className="stats">
+            <section className="stats text-center">
               <div>
                 <div>
                   <strong>{pokemon.length.toString().padStart(2, '0')}</strong>
@@ -321,16 +318,17 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
                   </div>
                   {quests.map((q) => (
                     <article className="quest-card" key={q.id}>
-                      <span className="quest-icon">{q.icon}</span>
                       <div>
                         <span className="quest-completed">
                           ✓ COMPLETED · {q.date}
                         </span>
-                        <h3>{q.title}</h3>
+                        <h3 className='uppercase'>{q.title}</h3>
                         <p>{q.description}</p>
-                        <small>⌖ {q.place}</small>
+                        <div className="flex flex-row  justify-around items-center">
+                          <small>{q.place}</small> 
+                          <b className='text-[8px] pt-2'>+{q.xp} XP</b> 
+                          </div>
                       </div>
-                      <b>+{q.xp} XP</b>
                     </article>
                   ))}
                 </div>
@@ -396,7 +394,7 @@ function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
               Trainer name
               <input
                 name="name"
-                defaultValue={profile.name}
+                defaultValue="Alexis Tan"
                 required
                 maxLength={40}
                 pattern=".*\S.*"
