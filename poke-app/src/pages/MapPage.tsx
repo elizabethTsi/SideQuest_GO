@@ -1,7 +1,8 @@
 
 import { useRef, useState } from "react";
 
-const WORLD_SIZE = 2000;
+const WORLD_WIDTH = 5600 / 2;
+const WORLD_HEIGHT = 4320 / 2;
 
 const quests = [
   { id: 1, name: "Hidden Cafe", x: 350, y: 400 },
@@ -11,6 +12,9 @@ const quests = [
 
 export default function MapPage() {
   const viewportRef = useRef<HTMLDivElement>(null);
+
+  // Hooks must be inside the component
+  const [zoom, setZoom] = useState(1);
 
   const [position, setPosition] = useState({
     x: -700,
@@ -24,9 +28,43 @@ export default function MapPage() {
     y: 0,
   });
 
-  function handlePointerDown(
-    e: React.PointerEvent<HTMLDivElement>
-  ) {
+  function clampPosition(x: number, y: number, scale = zoom) {
+    const viewport = viewportRef.current;
+    if (!viewport) return { x, y };
+
+    const minX = Math.min(0, viewport.clientWidth - WORLD_WIDTH * scale);
+    const minY = Math.min(0, viewport.clientHeight - WORLD_HEIGHT * scale);
+
+    return {
+      x: Math.max(minX, Math.min(0, x)),
+      y: Math.max(minY, Math.min(0, y)),
+    };
+  }
+
+  function changeZoom(nextZoom: number) {
+    const newZoom = Math.max(0.5, Math.min(3, nextZoom));
+    setZoom(newZoom);
+
+    // Keep the current view centered while zooming
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const centerX = viewport.clientWidth / 2;
+    const centerY = viewport.clientHeight / 2;
+
+    const worldX = (centerX - position.x) / zoom;
+    const worldY = (centerY - position.y) / zoom;
+
+    const nextX = centerX - worldX * newZoom;
+    const nextY = centerY - worldY * newZoom;
+
+    setPosition(clampPosition(nextX, nextY, newZoom));
+  }
+
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    // Only drag when the background/world is clicked
+    if ((e.target as HTMLElement).closest("button")) return;
+
     e.currentTarget.setPointerCapture(e.pointerId);
 
     dragStart.current = {
@@ -37,77 +75,97 @@ export default function MapPage() {
     };
   }
 
-  function handlePointerMove(
-    e: React.PointerEvent<HTMLDivElement>
-  ) {
-    if (!e.currentTarget.hasPointerCapture(e.pointerId)) {
-      return;
-    }
-
-    const viewport = viewportRef.current;
-    if (!viewport) return;
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!e.currentTarget.hasPointerCapture(e.pointerId)) return;
 
     const dx = e.clientX - dragStart.current.pointerX;
     const dy = e.clientY - dragStart.current.pointerY;
 
-    const maxX = viewport.clientWidth - WORLD_SIZE;
-    const maxY = viewport.clientHeight - WORLD_SIZE;
-
-    setPosition({
-      x: Math.max(maxX, Math.min(0, dragStart.current.x + dx)),
-      y: Math.max(maxY, Math.min(0, dragStart.current.y + dy)),
-    });
+    setPosition(
+      clampPosition(
+        dragStart.current.x + dx,
+        dragStart.current.y + dy
+      )
+    );
   }
 
   return (
     <div
       ref={viewportRef}
-      className="relative h-full w-full overflow-hidden bg-slate-200 touch-none"
+      className="relative h-full w-full overflow-hidden rounded-3xl bg-slate-200 touch-none"
     >
-      {/* The entire world moves together */}
+      {/* Moving world: background and markers zoom together */}
       <div
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         className="absolute left-0 top-0 cursor-grab active:cursor-grabbing"
         style={{
-          width: WORLD_SIZE,
-          height: WORLD_SIZE,
-          transform: `translate(${position.x}px, ${position.y}px)`,
+          width: WORLD_WIDTH,
+          height: WORLD_HEIGHT,
+          transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+          transformOrigin: "top left",
         }}
       >
-        {/* Large background image */}
         <img
           src="/images/tech_map.jpg"
-          draggable={false}
           alt="Explore the world"
-          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover"
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-fill"
         />
 
-        {/* Quest markers are attached to world coordinates */}
         {quests.map((quest) => (
           <button
             key={quest.id}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => alert(quest.name)}
             className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-600 px-3 py-2 text-sm font-bold text-white shadow-lg"
-            style={{
-              left: quest.x,
-              top: quest.y,
-            }}
+            style={{ left: quest.x, top: quest.y }}
           >
             📍 {quest.name}
           </button>
         ))}
       </div>
 
-      {/* Fixed screen UI: does not move with the world */}
-      <div className="pointer-events-none absolute bottom-4 left-4 rounded-xl bg-white/90 px-3 py-2 shadow">
+      {/* Fixed zoom controls */}
+      <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2">
+        <button
+          type="button"
+          onClick={() => changeZoom(zoom + 0.25)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
+        >
+          +
+        </button>
+
+        <button
+          type="button"
+          onClick={() => changeZoom(zoom - 0.25)}
+          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
+        >
+          −
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setZoom(1);
+            setPosition({ x: -700, y: -600 });
+          }}
+          className="flex h-8 w-12 items-center justify-center rounded-xl bg-white text-sm font-bold text-slate-900 shadow-lg"
+        >
+          1:1
+        </button>
+
+        <div className="rounded-lg bg-white px-2 py-1 text-center text-xs font-semibold text-slate-900 shadow">
+          {Math.round(zoom * 100)}%
+        </div>
+      </div>
+
+      {/* Fixed screen UI */}
+      <div className="pointer-events-none absolute bottom-4 left-4 z-40 rounded-xl bg-white/90 px-3 py-2 shadow">
         <p className="text-sm font-semibold text-slate-900">
           Explore your world
         </p>
-        <p className="text-xs text-slate-600">
-          Drag to look around
-        </p>
+        <p className="text-xs text-slate-600">Drag to look around</p>
       </div>
     </div>
   );
