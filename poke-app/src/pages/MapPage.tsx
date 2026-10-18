@@ -183,25 +183,26 @@ export default function MapPage({
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={() => changeZoom(zoom + 0.25)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
-          aria-label="Zoom in"
-        >
-          +
-        </button>
+      <div className="absolute bottom-17 right-4 z-50 flex flex-col gap-2">
+        <div className='flex flex-row justify-evenly'>
+          <button
+            type="button"
+            onClick={() => changeZoom(zoom + 0.25)}
+            className="flex h-5 w-5 items-center justify-center rounded-lg bg-white text-2xl font-bold text-slate-900 shadow-lg"
+            aria-label="Zoom in"
+          >
+            +
+          </button>
 
-        <button
-          type="button"
-          onClick={() => changeZoom(zoom - 0.25)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
-          aria-label="Zoom out"
-        >
-          −
-        </button>
-
+          <button
+            type="button"
+            onClick={() => changeZoom(zoom - 0.25)}
+            className="flex h-5 w-5 items-center justify-center rounded-lg bg-white text-2xl font-bold text-slate-900 shadow-lg"
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+        </div>
         <button
           type="button"
           onClick={resetMap}
@@ -220,7 +221,7 @@ export default function MapPage({
 
       {/* Profile button */}
       <button
-        className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl shadow-lg"
+        className="absolute right-5 bottom-4 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl shadow-lg"
         onClick={onOpenProfile}
         aria-label="Open trainer profile"
         title="Trainer Profile"
