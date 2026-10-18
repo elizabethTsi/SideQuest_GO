@@ -8,14 +8,15 @@ import type { EncounterQuest } from '../catches'
 const WORLD_WIDTH = 5600 / 2
 const WORLD_HEIGHT = 4320 / 2
 
+
 const quests = [
   {
     id: 1,
     title: 'Find Buzz and Take a Photo',
     description:
-      'Find Buzz and take a photo together to complete this campus challenge!',
-    difficulty: 'Easy',
-    reward: '50 XP',
+      "Find Georgia Tech's favorite mascot, Buzz, somewhere on campus and snap a picture with him. Bonus points if you can get him to do a funny pose!",
+    difficulty: 'Hard',
+    reward: '250 XP',
     location: 'Georgia Tech Campus',
     x: 1685,
     y: 1430,
@@ -24,9 +25,9 @@ const quests = [
     id: 2,
     title: "Buy Coffee from Kaldi's Coffee",
     description:
-      "Visit Kaldi's Coffee and buy a coffee to complete this caffeine-fueled side quest.",
+      "Stop by Kaldi's Coffee and treat yourself to a drink. Try something new or stick with your usual order.",
     difficulty: 'Easy',
-    reward: '75 XP',
+    reward: '50 XP',
     location: "Kaldi's Coffee",
     x: 1845,
     y: 1495,
@@ -35,14 +36,202 @@ const quests = [
     id: 3,
     title: 'Take an Exercise Class at the CRC',
     description:
-      'Head to the Campus Recreation Center and take an exercise class to complete this fitness challenge.',
+      "Step outside your usual workout routine and join a group exercise class at the Campus Recreation Center. Whether it's yoga, cycling, or something completely new, give it a shot!",
     difficulty: 'Medium',
-    reward: '100 XP',
+    reward: '150 XP',
     location: 'Campus Recreation Center (CRC)',
     x: 545,
     y: 1210,
   },
+  {
+    id: 4,
+    title: 'LARP as a Student from Another College at a Football Game',
+    description:
+      'Show up to a Georgia Tech football game dressed like you belong to another university. Represent your fake school with confidence and see how long you can keep up the act.',
+    difficulty: 'Hard',
+    reward: '300 XP',
+    location: 'Bobby Dodd Stadium',
+    x: 1250,
+    y: 900,
+  },
+  {
+    id: 5,
+    title: 'Study Until Sunset at Crosland Tower 7th Floor',
+    description:
+      'Grab your laptop, find a seat on the seventh floor of Crosland Tower, and get some studying done while the sun sets over Atlanta.',
+    difficulty: 'Medium',
+    reward: '175 XP',
+    location: 'Crosland Tower, 7th Floor',
+    x: 1500,
+    y: 1100,
+  },
+  {
+    id: 6,
+    title: "Get in a Random Line Without Knowing What It's For",
+    description:
+      "See a line forming somewhere on campus? Join it without asking what everyone's waiting for. Stick around until you reach the front and discover what you've gotten yourself into.",
+    difficulty: 'Easy',
+    reward: '75 XP',
+    location: 'Anywhere on Campus',
+    x: 1000,
+    y: 700,
+  },
+  {
+    id: 7,
+    title: 'Get Creative at Paper & Clay',
+    description:
+      'Take a break from assignments and head to Paper & Clay to make something with your hands. Paint, craft, or experiment with something creative.',
+    difficulty: 'Easy',
+    reward: '100 XP',
+    location: 'Paper & Clay',
+    x: 1950,
+    y: 1200,
+  },
+  {
+    id: 8,
+    title: 'Take a Dance Class',
+    description:
+      'Try out a dance class on campus, even if you have absolutely no rhythm. Learn some moves, meet new people, and embrace looking a little ridiculous.',
+    difficulty: 'Medium',
+    reward: '175 XP',
+    location: 'Campus Recreation Center (CRC)',
+    x: 650,
+    y: 1350,
+  },
+  {
+    id: 9,
+    title: 'Run the Pi Mile',
+    description:
+      "Challenge yourself to run Georgia Tech's famous Pi Mile, a roughly 3.14-mile route around campus. Whether you're going for a personal record or just trying to finish, make it to the end!",
+    difficulty: 'Hard',
+    reward: '300 XP',
+    location: 'Pi Mile Trail',
+    x: 850,
+    y: 1700,
+  },
+  {
+    id: 10,
+    title: 'Climb Freshman Hill',
+    description:
+      "Conquer one of Georgia Tech's most infamous uphill walks. Make your way up Freshman Hill without stopping and experience the daily struggle of every student who's ever been late to class.",
+    difficulty: 'Easy',
+    reward: '75 XP',
+    location: 'Freshman Hill',
+    x: 1150,
+    y: 1450,
+  },
+  {
+    id: 11,
+    title: "Attend a Lecture for a Class You Don't Take",
+    description:
+      'Find a lecture on a subject you know absolutely nothing about and sit in, with permission. See how much you can learn from a class you never planned on taking.',
+    difficulty: 'Medium',
+    reward: '150 XP',
+    location: 'Georgia Tech Lecture Halls',
+    x: 1400,
+    y: 1550,
+  },
+  {
+    id: 12,
+    title: 'Attend a Student Performance at the Ferst Center',
+    description:
+      'Check out a student performance at the Ferst Center for the Arts. Whether it is music, theater, or dance, support your fellow Yellow Jackets and discover some campus talent.',
+    difficulty: 'Easy',
+    reward: '150 XP',
+    location: 'Ferst Center for the Arts',
+    x: 1750,
+    y: 800,
+  },
+  {
+    id: 13,
+    title: 'Find Free Food on Campus',
+    description:
+      'Go on a mission to find free food somewhere on Georgia Tech campus. Look for student organization events, campus giveaways, or other opportunities to score a free snack or meal.',
+    difficulty: 'Medium',
+    reward: '175 XP',
+    location: 'Anywhere on Campus',
+    x: 900,
+    y: 1100,
+  },
+  {
+    id: 14,
+    title: 'Attend a Random Career Fair',
+    description:
+      "Walk into a career fair outside your usual field of interest and explore what other industries have to offer. Talk to a recruiter, discover a job you've never heard of, or just see what's happening.",
+    difficulty: 'Medium',
+    reward: '150 XP',
+    location: 'Georgia Tech Career Fair Venues',
+    x: 2050,
+    y: 1450,
+  },
+  {
+    id: 15,
+    title: 'Wear UGA Merch on Campus',
+    description:
+      'Commit the ultimate Georgia Tech betrayal by showing up on campus wearing University of Georgia merchandise. Walk around confidently and see how your fellow Yellow Jackets react.',
+    difficulty: 'Hard',
+    reward: '300 XP',
+    location: 'Georgia Tech Campus',
+    x: 700,
+    y: 850,
+  },
+  {
+    id: 16,
+    title: 'Pretend to Give a Lecture in an Empty Lecture Hall',
+    description:
+      'Find an empty, available lecture hall and step up to the podium. Deliver your most convincing professor impression to your friends, complete with dramatic explanations and imaginary homework.',
+    difficulty: 'Medium',
+    reward: '175 XP',
+    location: 'Georgia Tech Lecture Halls',
+    x: 1550,
+    y: 1750,
+  },
+  {
+    id: 17,
+    title: 'Take a Multi-Person Scooter Ride',
+    description:
+      'Gather your friends for a group scooter adventure around campus. Everyone gets their own scooter—ride together, explore familiar paths, and turn an ordinary trip into a mini expedition.',
+    difficulty: 'Medium',
+    reward: '175 XP',
+    location: 'Georgia Tech Campus',
+    x: 450,
+    y: 1600,
+  },
+  {
+    id: 18,
+    title: 'Ride the Slides Outside the Kendeda Building',
+    description:
+      'Head over to the Kendeda Building and find its outdoor slides. Give them a try where permitted and relive a little bit of your childhood between college classes.',
+    difficulty: 'Easy',
+    reward: '75 XP',
+    location: 'Kendeda Building',
+    x: 1900,
+    y: 1750,
+  },
+  {
+    id: 19,
+    title: 'Find the CULC Roof Garden',
+    description:
+      'Explore the Clough Undergraduate Learning Commons and make your way to its rooftop garden. Take a break from the busy campus and enjoy a quiet green space hidden above the crowds.',
+    difficulty: 'Easy',
+    reward: '100 XP',
+    location: 'Clough Undergraduate Learning Commons (CULC)',
+    x: 1100,
+    y: 1050,
+  },
+  {
+    id: 20,
+    title: 'Take a Picture with Tech Tower',
+    description:
+      "Visit one of Georgia Tech's most iconic landmarks, Tech Tower, and take a picture to commemorate your visit. Get creative with your angle or pose and capture a little piece of Tech history.",
+    difficulty: 'Easy',
+    reward: '75 XP',
+    location: 'Tech Tower',
+    x: 1350,
+    y: 1250,
+  },
 ]
+
 
 type MapPageProps = {
   onOpenProfile: () => void
