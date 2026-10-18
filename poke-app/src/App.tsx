@@ -152,7 +152,7 @@ function App() {
         </div>
         {loading && <LoadingScreen screen={loading} />}
         <div
-          className={`phone-status absolute top-2 inset-x-0 z-10 ${showingProfile ? 'phone-status-profile' : ''}`}
+          className={`phone-status absolute top-2 inset-x-0 ${loading ? 'z-[1001]' : 'z-10'} ${showingProfile ? 'phone-status-profile' : ''}`}
         >
           <div className="text-black phone-status-row">
             <div className="phone-status-time">
