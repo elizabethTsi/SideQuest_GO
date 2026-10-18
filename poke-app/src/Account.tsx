@@ -204,9 +204,6 @@ function App() {
             <>
               <div className="page-heading">
                 <div>
-                  <div className="eyebrow">
-                    YOUR STORY, ONE DISCOVERY AT A TIME
-                  </div>
                   <h1>
                     Trainer Profile<span className="gold">.</span>
                   </h1>
@@ -423,10 +420,6 @@ function App() {
                         </button>
                       </div>
                     )}
-                    <p className="collection-foot">
-                      {visible.length} companions. A whole campus of
-                      possibilities.<span>KEEP EXPLORING ↗</span>
-                    </p>
                   </div>
                 ) : (
                   <div
