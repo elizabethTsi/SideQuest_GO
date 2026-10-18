@@ -1,36 +1,95 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import MapPage from './pages/MapPage'
+import { Wifi, BatteryFull, Signal } from 'lucide-react'
+import Signin from './pages/signin'
 import Accounts from './accounts'
-import CampusWelcome from './components/CampusWelcome'
 import './App.css'
 import './phone.css'
+import './profile-navigation.css'
 
-export default function App() {
+function App() {
+  const [time, setTime] = useState(new Date())
+  const [page, setPage] = useState('home')
   const [route, setRoute] = useState(window.location.hash)
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
   useEffect(() => {
     const onRouteChange = () => setRoute(window.location.hash)
     window.addEventListener('hashchange', onRouteChange)
     return () => window.removeEventListener('hashchange', onRouteChange)
   }, [])
-  const isWelcome = !route || route === '#/welcome'
+
+  const showingProfile =
+    page === 'map' && (route === '#/account' || route.startsWith('#/pokemon/'))
 
   return (
-    <div className="phone-preview">
-      <div className="phone-frame" aria-label="SideQuest GO phone preview">
-        <div className="phone-content">
-          {isWelcome ? <CampusWelcome /> : <Accounts route={route} />}
+    <div className="flex min-h-screen items-center justify-center bg-slate-100">
+      <div className="phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7">
+        <div className="relative h-full w-full min-h-0">
+          {page === 'home' && (
+            <Signin
+              onContinue={() => {
+                setPage('map')
+                window.location.hash = '/map'
+              }}
+            />
+          )}
+          {page === 'map' && (
+            <>
+              {/* Keep the map mounted so returning preserves the dragged position. */}
+              <div className="map-screen" hidden={showingProfile}>
+                <MapPage
+                  onOpenProfile={() => {
+                    window.location.hash = '/account'
+                  }}
+                />
+              </div>
+              {showingProfile && (
+                <section
+                  className="trainer-screen"
+                  aria-label="Trainer account"
+                >
+                  <div className="trainer-navigation">
+                    <a href="#/map">← Back to map</a>
+                  </div>
+                  <div className="trainer-content">
+                    <Accounts route={route} />
+                  </div>
+                </section>
+              )}
+            </>
+          )}
         </div>
-        <nav
-          className="phone-navigation"
-          aria-label="Temporary preview navigation"
+        <div
+          className={`phone-status absolute top-2 right-2 z-10 items-center ${showingProfile ? 'phone-status-profile' : ''}`}
         >
-          <a href="#/welcome" aria-current={isWelcome ? 'page' : undefined}>
-            Campus Adventure
-          </a>
-          <a href="#/account" aria-current={!isWelcome ? 'page' : undefined}>
-            Trainer Profile
-          </a>
-        </nav>
+          <div className="flex flex-row items-center justify-center">
+            <div className="pr-3 text-sm">
+              {time
+                .toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                })
+                .replace(/\s?[AP]M$/, '')}
+            </div>
+            <div className="bg-black w-[130px] h-[30px] rounded-3xl" />
+            <div className="pl-3">
+              <div className="flex items-center gap-2">
+                <Signal size={12} strokeWidth={2} />
+                <Wifi size={12} strokeWidth={2} />
+                <BatteryFull size={12} strokeWidth={2} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
+
+export default App
