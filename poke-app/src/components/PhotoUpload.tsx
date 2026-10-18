@@ -75,10 +75,6 @@ export default function PhotoUpload({
         </div>
       </div>
 
-      <p role="status" className="mb-3 text-xs text-slate-500">
-        Add your quest photo to start the catch encounter.
-      </p>
-
       {/* Hidden file input */}
       <input
         ref={inputRef}

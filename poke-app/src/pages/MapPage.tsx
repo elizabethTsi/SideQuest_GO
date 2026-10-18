@@ -58,7 +58,6 @@ export default function MapPage({
   >(null)
   const [page, setPage] = useState<'map' | 'upload'>('map')
   const [activeQuest, setActiveQuest] = useState<EncounterQuest | null>(null)
-  const [photoStep, setPhotoStep] = useState<1 | 2>(1)
   const encounterStarted = useRef(false)
   const viewportRef = useRef<HTMLDivElement>(null)
 
@@ -137,23 +136,16 @@ export default function MapPage({
   if (page === 'upload' && activeQuest) {
     return (
       <PhotoUpload
-        key={`${activeQuest.id}-${photoStep}`}
-        step={photoStep}
+        key={activeQuest.id}
         onBack={() => {
           setActiveQuest(null)
-          setPhotoStep(1)
           setPage('map')
         }}
         onSubmit={() => {
           if (encounterStarted.current) return
-          if (photoStep === 1) {
-            setPhotoStep(2)
-            return
-          }
           encounterStarted.current = true
           onAcceptQuest(activeQuest)
           setActiveQuest(null)
-          setPhotoStep(1)
           setPage('map')
         }}
       />
@@ -258,7 +250,6 @@ export default function MapPage({
           if (!selectedQuest) return
 
           setActiveQuest(selectedQuest)
-          setPhotoStep(1)
           encounterStarted.current = false
           setSelectedQuest(null)
           setPage('upload')
