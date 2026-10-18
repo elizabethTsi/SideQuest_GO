@@ -154,7 +154,7 @@ function App() {
         <div
           className={`phone-status absolute top-2 inset-x-0 z-10 ${showingProfile ? 'phone-status-profile' : ''}`}
         >
-          <div className="phone-status-row">
+          <div className="text-black phone-status-row">
             <div className="phone-status-time">
               {time
                 .toLocaleTimeString('en-US', {
