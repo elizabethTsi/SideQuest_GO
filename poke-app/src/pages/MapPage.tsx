@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { MapPin } from 'lucide-react'
 import SideQuestModal from '../components/SideQuestModal'
+import PhotoUpload from "../components/PhotoUpload";
 
 const WORLD_WIDTH = 5600 / 2
 const WORLD_HEIGHT = 4320 / 2
@@ -55,7 +56,7 @@ export default function MapPage({
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
   >(null)
-
+  const [page, setPage] = useState<"map" | "upload">("map");
   const viewportRef = useRef<HTMLDivElement>(null)
 
   const [zoom, setZoom] = useState(1)
@@ -130,6 +131,19 @@ export default function MapPage({
     setPosition(clampPosition(-700, -600, 1))
   }
 
+  if (page === "upload") {
+  return (
+    <PhotoUpload
+      onBack={() => setPage("map")}
+      onSubmit={(photo) => {
+        console.log("Photo selected:", photo);
+        // Add photo submission logic here.
+        setPage("map");
+      }}
+    />
+  );
+}
+
   return (
     <div
       ref={viewportRef}
@@ -149,7 +163,7 @@ export default function MapPage({
       >
         <img
           src="/images/tech_map.jpg"
-          alt="Explore the world"
+          alt="Find Quests!"
           draggable={false}
           className="pointer-events-none absolute inset-0 h-full w-full select-none object-fill"
         />
@@ -159,11 +173,11 @@ export default function MapPage({
             key={quest.id}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => setSelectedQuest(quest)}
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3b4cca] px-3 py-2 text-sm font-bold text-white shadow-lg"
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-[#3b4cca] px-3 py-2 text-sm font-bold text-white shadow-lg"
             style={{ left: quest.x, top: quest.y }}
             aria-label={`Open quest: ${quest.title}`}
           >
-            <MapPin />
+            <MapPin className='text-yellow-300 my-1'/>
           </button>
         ))}
       </div>
@@ -202,13 +216,7 @@ export default function MapPage({
         </div>
       </div>
 
-      {/* Map help */}
-      <div className="pointer-events-none absolute bottom-4 left-4 z-40 rounded-xl bg-white/90 px-3 py-2 shadow">
-        <p className="text-sm font-semibold text-slate-900">
-          Explore your world
-        </p>
-        <p className="text-xs text-slate-600">Drag to look around</p>
-      </div>
+     
 
       {/* Profile button */}
       <button
@@ -233,10 +241,11 @@ export default function MapPage({
         }}
         onClose={() => setSelectedQuest(null)}
         onAccept={() => {
-          if (!selectedQuest) return
+          if (!selectedQuest) return;
 
-          onAcceptQuest(selectedQuest)
-          setSelectedQuest(null)
+          console.log("Accepted quest:", selectedQuest.title);
+          setSelectedQuest(null);
+          setPage("upload");
         }}
       />
     </div>

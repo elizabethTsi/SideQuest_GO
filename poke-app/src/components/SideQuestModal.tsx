@@ -22,7 +22,7 @@ export default function SideQuestModal({
   if (!isOpen) return null;
 
   return (
-    <div className="absolute inset-0 z-[100] flex items-center justify-center overflow-hidden rounded-3xl p-3 backdrop-blur-[2px]">
+    <div className="absolute inset-0 z-[100] flex items-center justify-center overflow-hidden rounded-3xl pt-3 pr-3 pl-3 backdrop-blur-[2px]">
       <div
         role="dialog"
         aria-modal="true"
@@ -54,24 +54,24 @@ export default function SideQuestModal({
         </div>
 
         {/* Scrollable quest details */}
-        <div className="min-h-0 overflow-y-auto overscroll-contain p-3">
+        <div className="mt-4 flex flex-col min-h-0 overflow-y-auto overscroll-contain p-3">
 
           {/* Difficulty and reward */}
           <div className="grid grid-cols-2 gap-2">
-            <div className="min-w-0 rounded-lg p-2">
+            <div className="flex flex-col items-center justify-center min-w-0 rounded-lg p-2">
               <p className="text-[9px] uppercase tracking-wider text-slate-900">
                 Difficulty
               </p>
-              <p className="mt-1 break-words text-xs font-bold text-amber-600">
+              <p className="mt-1 uppercase break-words text-xs font-bold text-amber-600">
                 {quest.difficulty}
               </p>
             </div>
 
-            <div className="min-w-0 rounded-lg p-2">
+            <div className="flex flex-col items-center min-w-0 rounded-lg p-2">
               <p className="text-[9px] uppercase tracking-wider text-slate-900">
                 Reward
               </p>
-              <p className="mt-1 break-words text-xs font-bold text-amber-600">
+              <p className="mt-1  break-words text-xs font-bold text-amber-600">
                 {quest.reward}
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function SideQuestModal({
 
         
           {/* Action buttons */}
-          <div className="flex flex-col items-center gap-2">
+          <div className="mt-3 flex flex-col items-center gap-2">
             <button
               type="button"
               onClick={onAccept}
