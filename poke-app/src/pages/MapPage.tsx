@@ -17,8 +17,8 @@ const quests = [
     difficulty: 'Hard',
     reward: '250 XP',
     location: 'Georgia Tech Campus',
-    x: 1685,
-    y: 1430,
+    x: 1683,
+    y: 1432,
   },
   {
     id: 2,
@@ -39,8 +39,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '150 XP',
     location: 'Campus Recreation Center (CRC)',
-    x: 545,
-    y: 1210,
+    x: 542.5,
+    y: 1212,
   },
   {
     id: 4,
@@ -50,8 +50,8 @@ const quests = [
     difficulty: 'Hard',
     reward: '300 XP',
     location: 'Bobby Dodd Stadium',
-    x: 1250,
-    y: 900,
+    x: 2442.5,
+    y: 1872.3,
   },
   {
     id: 5,
@@ -61,8 +61,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '175 XP',
     location: 'Crosland Tower, 7th Floor',
-    x: 1500,
-    y: 1100,
+    x: 2055.7,
+    y: 1513.6,
   },
   {
     id: 6,
@@ -72,8 +72,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '75 XP',
     location: 'Anywhere on Campus',
-    x: 1000,
-    y: 700,
+    x: 1502,
+    y: 1523.4,
   },
   {
     id: 7,
@@ -83,8 +83,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '100 XP',
     location: 'Paper & Clay',
-    x: 1950,
-    y: 1200,
+    x: 1064.3,
+    y: 1385.4,
   },
   {
     id: 8,
@@ -94,8 +94,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '175 XP',
     location: 'Campus Recreation Center (CRC)',
-    x: 650,
-    y: 1350,
+    x: 542.5,
+    y: 1212,
   },
   {
     id: 9,
@@ -105,8 +105,8 @@ const quests = [
     difficulty: 'Hard',
     reward: '300 XP',
     location: 'Pi Mile Trail',
-    x: 850,
-    y: 1700,
+    x: 2314.2,
+    y: 949.8,
   },
   {
     id: 10,
@@ -116,8 +116,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '75 XP',
     location: 'Freshman Hill',
-    x: 1150,
-    y: 1450,
+    x: 2215.8,
+    y: 1578.1,
   },
   {
     id: 11,
@@ -127,8 +127,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '150 XP',
     location: 'Georgia Tech Lecture Halls',
-    x: 1400,
-    y: 1550,
+    x: 1936.1,
+    y: 1972.2,
   },
   {
     id: 12,
@@ -138,8 +138,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '150 XP',
     location: 'Ferst Center for the Arts',
-    x: 1750,
-    y: 800,
+    x: 1368.3,
+    y: 1318,
   },
   {
     id: 13,
@@ -149,8 +149,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '175 XP',
     location: 'Anywhere on Campus',
-    x: 900,
-    y: 1100,
+    x: 1762.4,
+    y: 1357.4,
   },
   {
     id: 14,
@@ -160,8 +160,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '150 XP',
     location: 'Georgia Tech Career Fair Venues',
-    x: 2050,
-    y: 1450,
+    x: 2447.6,
+    y: 200.2,
   },
   {
     id: 15,
@@ -171,19 +171,19 @@ const quests = [
     difficulty: 'Hard',
     reward: '300 XP',
     location: 'Georgia Tech Campus',
-    x: 700,
-    y: 850,
+    x: 1967.9,
+    y: 1296.6,
   },
   {
     id: 16,
     title: 'Pretend to Give a Lecture in an Empty Lecture Hall',
     description:
-      'Find an empty, available lecture hall and step up to the podium. Deliver your most convincing professor impression to your friends, complete with dramatic explanations and imaginary homework.',
+      'Find an empty, available lecture hall and step up to the podium. Then add it to your LinkedIn banner for clout!.',
     difficulty: 'Medium',
     reward: '175 XP',
     location: 'Georgia Tech Lecture Halls',
-    x: 1550,
-    y: 1750,
+    x: 1696.5,
+    y: 756.7,
   },
   {
     id: 17,
@@ -193,8 +193,8 @@ const quests = [
     difficulty: 'Medium',
     reward: '175 XP',
     location: 'Georgia Tech Campus',
-    x: 450,
-    y: 1600,
+    x: 797.5,
+    y: 1234.6,
   },
   {
     id: 18,
@@ -204,8 +204,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '75 XP',
     location: 'Kendeda Building',
-    x: 1900,
-    y: 1750,
+    x: 1141.7,
+    y: 505.6,
   },
   {
     id: 19,
@@ -215,8 +215,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '100 XP',
     location: 'Clough Undergraduate Learning Commons (CULC)',
-    x: 1100,
-    y: 1050,
+    x: 2073.2,
+    y: 1416.8,
   },
   {
     id: 20,
@@ -226,8 +226,8 @@ const quests = [
     difficulty: 'Easy',
     reward: '75 XP',
     location: 'Tech Tower',
-    x: 1350,
-    y: 1250,
+    x: 2129.8,
+    y: 1984.8,
   },
 ]
 
@@ -396,13 +396,13 @@ export default function MapPage({
 
       {/* Fixed center compass */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 z-40 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-white shadow-xl"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-40 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-white"
         aria-label="Map compass"
       >
         <img
           src="/images/ramblin.png"
           alt="Ramblin Wreck Car"
-          className="h-14 w-14 shadow-xl"
+          className="h-14 w-14"
           style={{
             transform: `rotate(${compassRotation}deg)`,
             transition: 'transform 100ms ease-out',
