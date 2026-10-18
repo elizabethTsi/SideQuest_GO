@@ -100,7 +100,7 @@ export const pokemon: Pokemon[] = [
     id: 'robot-1',
     dex: 5,
     name: 'Robot',
-    image: '/images/Golden-Eyed Robotic Quadruped.png',
+    image: '/images/robot-removebg-preview.png',
     types: ['Electric', 'Steel'],
     cp: 680,
     hp: 75,
