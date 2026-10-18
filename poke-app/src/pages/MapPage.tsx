@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { MapPin } from 'lucide-react'
 import SideQuestModal from '../components/SideQuestModal'
 import PhotoUpload from '../components/PhotoUpload'
+import type { EncounterQuest } from '../catches'
 
 const WORLD_WIDTH = 5600 / 2
 const WORLD_HEIGHT = 4320 / 2
@@ -42,7 +43,6 @@ const quests = [
   },
 ]
 
-import type { EncounterQuest } from '../catches'
 import type { StartLoadingTransition } from '../hooks/useLoadingTransition'
 
 type MapPageProps = {
@@ -59,6 +59,7 @@ export default function MapPage({
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
   >(null)
+
   const [page, setPage] = useState<'map' | 'upload'>('map')
   const [activeQuest, setActiveQuest] = useState<EncounterQuest | null>(null)
   const encounterStarted = useRef(false)
@@ -66,6 +67,7 @@ export default function MapPage({
 
   const [zoom, setZoom] = useState(1)
   const [position, setPosition] = useState({ x: -700, y: -600 })
+  const [compassRotation, setCompassRotation] = useState(0)
 
   const dragStart = useRef({
     pointerX: 0,
@@ -129,11 +131,18 @@ export default function MapPage({
     setPosition(
       clampPosition(dragStart.current.x + dx, dragStart.current.y + dy),
     )
+
+    // Rotate the compass based on the drag direction.
+    if (Math.abs(dx) + Math.abs(dy) > 0) {
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+      setCompassRotation(angle + 90)
+    }
   }
 
   function resetMap() {
     setZoom(1)
     setPosition(clampPosition(-700, -600, 1))
+    setCompassRotation(0)
   }
 
   if (page === 'upload' && activeQuest) {
@@ -192,30 +201,48 @@ export default function MapPage({
             style={{ left: quest.x, top: quest.y }}
             aria-label={`Open quest: ${quest.title}`}
           >
-            <MapPin className="text-yellow-300 my-1" />
+            <MapPin className="my-1 text-yellow-300" />
           </button>
         ))}
       </div>
 
-      {/* Zoom controls */}
-      <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={() => changeZoom(zoom + 0.25)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
-          aria-label="Zoom in"
-        >
-          +
-        </button>
+      {/* Fixed center compass */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 z-40 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center text-white shadow-xl"
+        aria-label="Map compass"
+      >
+        <img
+          src="/images/ramblin.png"
+          alt="Ramblin Wreck Car"
+          className="h-14 w-14 shadow-xl"
+          style={{
+            transform: `rotate(${compassRotation}deg)`,
+            transition: 'transform 100ms ease-out',
+          }}
+        />
+      </div>
 
-        <button
-          type="button"
-          onClick={() => changeZoom(zoom - 0.25)}
-          className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-2xl font-bold text-slate-900 shadow-lg"
-          aria-label="Zoom out"
-        >
-          −
-        </button>
+      {/* Zoom controls */}
+      <div className="absolute bottom-17 right-4 z-50 flex flex-col gap-2">
+        <div className="flex flex-row justify-evenly">
+          <button
+            type="button"
+            onClick={() => changeZoom(zoom + 0.25)}
+            className="flex h-5 w-5 items-center justify-center rounded-lg bg-white text-2xl font-bold text-slate-900 shadow-lg"
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+
+          <button
+            type="button"
+            onClick={() => changeZoom(zoom - 0.25)}
+            className="flex h-5 w-5 items-center justify-center rounded-lg bg-white text-2xl font-bold text-slate-900 shadow-lg"
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+        </div>
 
         <button
           type="button"
@@ -233,7 +260,7 @@ export default function MapPage({
 
       {/* Profile button */}
       <button
-        className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl shadow-lg"
+        className="absolute bottom-4 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-white text-xl shadow-lg"
         onClick={onOpenProfile}
         aria-label="Open trainer profile"
         title="Trainer Profile"
@@ -241,7 +268,7 @@ export default function MapPage({
         <span aria-hidden="true">⚡</span>
       </button>
 
-      {/* Side quest modal: constrained to MapPage */}
+      {/* Side quest modal */}
       <SideQuestModal
         isOpen={selectedQuest !== null}
         quest={{
