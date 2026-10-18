@@ -43,8 +43,10 @@ const quests = [
 ]
 
 import type { EncounterQuest } from '../catches'
+import type { StartLoadingTransition } from '../hooks/useLoadingTransition'
 
 type MapPageProps = {
+  onTransition: StartLoadingTransition
   onOpenProfile: () => void
   onAcceptQuest: (quest: EncounterQuest) => void
 }
@@ -52,6 +54,7 @@ type MapPageProps = {
 export default function MapPage({
   onOpenProfile,
   onAcceptQuest,
+  onTransition,
 }: MapPageProps) {
   const [selectedQuest, setSelectedQuest] = useState<
     (typeof quests)[number] | null
@@ -138,15 +141,19 @@ export default function MapPage({
       <PhotoUpload
         key={activeQuest.id}
         onBack={() => {
-          setActiveQuest(null)
-          setPage('map')
+          onTransition('backToMap', () => {
+            setActiveQuest(null)
+            setPage('map')
+          })
         }}
         onSubmit={() => {
           if (encounterStarted.current) return
           encounterStarted.current = true
-          onAcceptQuest(activeQuest)
-          setActiveQuest(null)
-          setPage('map')
+          onTransition('photoToCatch', () => {
+            onAcceptQuest(activeQuest)
+            setActiveQuest(null)
+            setPage('map')
+          })
         }}
       />
     )
@@ -249,10 +256,13 @@ export default function MapPage({
         onAccept={() => {
           if (!selectedQuest) return
 
-          setActiveQuest(selectedQuest)
-          encounterStarted.current = false
-          setSelectedQuest(null)
-          setPage('upload')
+          const quest = selectedQuest
+          onTransition('questToPhoto', () => {
+            setActiveQuest(quest)
+            encounterStarted.current = false
+            setSelectedQuest(null)
+            setPage('upload')
+          })
         }}
       />
     </div>

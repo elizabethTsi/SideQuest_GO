@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import LoadingScreen from './components/LoadingScreen'
+import { useLoadingTransition } from './hooks/useLoadingTransition'
 import MapPage from './pages/MapPage'
 import { Wifi, BatteryFull, Signal } from 'lucide-react'
 import Signin from './pages/signin'
@@ -18,6 +20,7 @@ import './profile-navigation.css'
 import './trainer-theme.css'
 
 function App() {
+  const { loading, transition } = useLoadingTransition()
   const [time, setTime] = useState(new Date())
   const [page, setPage] = useState('home')
   const [route, setRoute] = useState(window.location.hash)
@@ -64,13 +67,37 @@ function App() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className={`phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7 ${showingProfile ? 'trainer-theme' : ''}`}>
-        <div className="relative h-full w-full min-h-0">
+      <div
+        className={`phone-frame relative flex flex-col border w-[71.5mm] h-[147.6mm] rounded-3xl border-7 ${showingProfile ? 'trainer-theme' : ''}`}
+      >
+        <div
+          className="relative h-full w-full min-h-0"
+          inert={loading !== null}
+          onClickCapture={(event) => {
+            const link = (event.target as HTMLElement).closest(
+              'a[href="#/map"]',
+            )
+            if (
+              !link ||
+              event.ctrlKey ||
+              event.metaKey ||
+              event.shiftKey ||
+              event.altKey
+            )
+              return
+            event.preventDefault()
+            transition('backToMap', () => {
+              window.location.hash = '/map'
+            })
+          }}
+        >
           {page === 'home' && (
             <Signin
               onContinue={() => {
-                setPage('map')
-                window.location.hash = '/map'
+                transition('loginToMap', () => {
+                  setPage('map')
+                  window.location.hash = '/map'
+                })
               }}
             />
           )}
@@ -83,8 +110,11 @@ function App() {
               >
                 <MapPage
                   onAcceptQuest={acceptQuest}
+                  onTransition={transition}
                   onOpenProfile={() => {
-                    window.location.hash = '/account'
+                    transition('mapToTrainer', () => {
+                      window.location.hash = '/account'
+                    })
                   }}
                 />
               </div>
@@ -95,8 +125,12 @@ function App() {
                   questTitle={encounter.questTitle}
                   onCatch={saveCatch}
                   onLeave={(destination) => {
-                    setEncounter(null)
-                    window.location.hash = destination
+                    const leave = () => {
+                      setEncounter(null)
+                      window.location.hash = destination
+                    }
+                    if (destination === '/map') transition('backToMap', leave)
+                    else leave()
                   }}
                 />
               )}
@@ -116,6 +150,7 @@ function App() {
             </>
           )}
         </div>
+        {loading && <LoadingScreen screen={loading} />}
         <div
           className={`phone-status absolute top-2 inset-x-0 z-10 ${showingProfile ? 'phone-status-profile' : ''}`}
         >
