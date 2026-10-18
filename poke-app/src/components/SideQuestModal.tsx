@@ -1,4 +1,3 @@
-import PhotoUpload from "../components/PhotoUpload.tsx";
 
 type SideQuestModalProps = {
   isOpen: boolean;

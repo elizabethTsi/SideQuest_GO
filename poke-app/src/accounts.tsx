@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { pokemon, quests } from './data'
+import { quests, type Pokemon } from './data'
 import PokemonDetail, { PokemonArtwork } from './components/PokemonDetail'
 
 type Profile = { name: string; handle: string; bio: string }
@@ -17,7 +17,7 @@ const initialProfile = {
   bio: 'Chasing Pokémon between classes. Go Jackets! 🐝',
 }
 
-function Accounts({ route }: { route: string }) {
+function Accounts({ route, pokemon }: { route: string; pokemon: Pokemon[] }) {
   const [profile, setProfile] = useState<Profile>(() => {
     const p = readSaved('poketech-profile', initialProfile)
     return p &&
@@ -111,9 +111,6 @@ function Accounts({ route }: { route: string }) {
           <>
             <div className="page-heading">
               <div>
-                <div className="eyebrow">
-                  YOUR STORY, ONE DISCOVERY AT A TIME
-                </div>
                 <h1>
                   Trainer Profile<span className="gold">.</span>
                 </h1>
@@ -124,9 +121,7 @@ function Accounts({ route }: { route: string }) {
               <div className="profile-banner">
                 <div className="banner-grid" />
                 <span className="banner-word">GO JACKETS!</span>
-                <span className="banner-tag">
-                  GEORGIA TECH EXPLORERS CLUB
-                </span>
+                <span className="banner-tag">GEORGIA TECH EXPLORERS CLUB</span>
                 <div className="orbit o1" />
                 <div className="orbit o2" />
               </div>
@@ -328,8 +323,7 @@ function Accounts({ route }: { route: string }) {
                     </div>
                   )}
                   <p className="collection-foot">
-                    {visible.length} companions. A whole campus of
-                    possibilities.<span>KEEP EXPLORING ↗</span>
+                    <span>KEEP EXPLORING ↗</span>
                   </p>
                 </div>
               ) : (
@@ -339,7 +333,6 @@ function Accounts({ route }: { route: string }) {
                   aria-label="Completed quests"
                 >
                   <div className="quest-intro">
-                    <h2>Little adventures. Lasting memories.</h2>
                     <p>Your completed campus quests, all in one place.</p>
                   </div>
                   {quests.map((q) => (

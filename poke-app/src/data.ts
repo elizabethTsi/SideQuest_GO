@@ -15,15 +15,12 @@ export interface Pokemon {
   moves: { name: string; type: string; power: number }[]
 }
 
-const art = (id: number) =>
-  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
-
 export const pokemon: Pokemon[] = [
   {
     id: 'buzz-1',
     dex: 1,
     name: 'Buzz',
-    image: '/images/sidequest.png',
+    image: '/images/buzz.png',
     types: ['Electric', 'Flying'],
     cp: 842,
     hp: 86,
@@ -103,7 +100,7 @@ export const pokemon: Pokemon[] = [
     id: 'robot-1',
     dex: 5,
     name: 'Robot',
-    image: art(81),
+    image: '/images/Golden-Eyed Robotic Quadruped.png',
     types: ['Electric', 'Steel'],
     cp: 680,
     hp: 75,
@@ -123,7 +120,7 @@ export const pokemon: Pokemon[] = [
     id: 'fox-1',
     dex: 6,
     name: 'Fox',
-    image: art(133),
+    image: '/images/fox.png',
     types: ['Normal'],
     cp: 540,
     hp: 65,
