@@ -92,18 +92,6 @@ The collection and random encounter selection use this data. `PokemonDetail` ren
 
 Edit the map quest definitions in `poke-app/src/pages/MapPage.tsx`. The initial quest panel loads its photo from `/images/<quest-id>.jpg`. Sample completed quest history is defined separately in `poke-app/src/data.ts`.
 
-### Loading screens
-
-Change `loadingImages` in `poke-app/src/hooks/useLoadingTransition.ts` to update the artwork pool. The current files are:
-
-- `loading screens.png`
-- `loading screens (1).png`
-- `loading screens (2).png`
-- `loading screens (3).png`
-
-Each loading screen selects one image and keeps it visible for `LOADING_DURATION_MS` (currently `1500`). No extra visible loading label is added over the artwork.
-
-Loading screens appear between login and map, map and trainer profile, quest acceptance and photo submission, photo submission and catching, and when returning to the map from those later screens. Opening or closing the initial quest information panel does not show a loading screen.
 
 ## Prototype behavior and storage
 
