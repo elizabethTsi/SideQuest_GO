@@ -9,7 +9,7 @@
 .phone-frame {
   width: min(71.5mm, calc(100vw - 32px));
   height: min(147.6mm, calc(100dvh - 32px));
-  border: 7px solid #172a39;
+  border: 7px solid #000000;
   border-radius: 28px;
   overflow: hidden;
   display: flex;

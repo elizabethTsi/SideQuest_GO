@@ -1,0 +1,76 @@
+/* Scope the trainer palette to the profile and its Pokémon detail views. */
+.phone-frame.trainer-theme {
+  --trainer-blue: #3b4cca;
+  --trainer-yellow: #ffcb05;
+  color: var(--trainer-blue);
+}
+.trainer-theme .phone-status-profile,
+.trainer-theme .trainer-navigation,
+.trainer-theme .section-tabs button[aria-selected='true'],
+.trainer-theme .level-row b,
+.trainer-theme .cp b,
+.trainer-theme .measurements strong,
+.trainer-theme .modal input,
+.trainer-theme .modal textarea {
+  color: var(--trainer-blue);
+}
+.trainer-theme .profile-banner,
+.trainer-theme .avatar small,
+.trainer-theme .filter-buttons button.selected,
+.trainer-theme .primary-button {
+  background: var(--trainer-blue);
+}
+.trainer-theme .gold,
+.trainer-theme .banner-tag,
+.trainer-theme .avatar small,
+.trainer-theme .favorite.selected,
+.trainer-theme .level-row > span:first-child b,
+.trainer-theme .quest-card > b,
+.trainer-theme .primary-button {
+  color: var(--trainer-yellow);
+}
+.trainer-theme .avatar,
+.trainer-theme .xp-track > div,
+.trainer-theme .section-tabs button[aria-selected='true']::after {
+  background: var(--trainer-yellow);
+}
+.trainer-theme .avatar > span {
+  filter: none;
+}
+.trainer-theme .orbit {
+  border-color: var(--trainer-yellow);
+  opacity: 0.25;
+}
+.trainer-theme .stat-icon,
+.trainer-theme .quest-icon,
+.trainer-theme .trainer-badge {
+  background: var(--trainer-yellow);
+  color: var(--trainer-blue);
+  border-color: var(--trainer-yellow);
+}
+.trainer-theme .detail-stage {
+  background: radial-gradient(ellipse at 50% 55%, #6475e1, var(--trainer-blue) 75%);
+}
+.trainer-theme .spark {
+  color: var(--trainer-yellow);
+}
+.phone-frame.trainer-theme .modal {
+  background: rgb(59 76 202 / 85%);
+}
+.trainer-theme .keep-exploring-link {
+  display: inline-block;
+  padding: 11px 15px;
+  border-radius: 7px;
+  background: var(--trainer-blue);
+  color: var(--trainer-yellow);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+.trainer-theme .keep-exploring-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.trainer-theme :is(button, a, input, textarea, select):focus-visible {
+  outline-color: var(--trainer-blue);
+}
