@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ImagePlus, Upload, X, Check } from "lucide-react";
+import { ImagePlus, Upload, X, Check, ArrowLeft } from "lucide-react";
 
 type PhotoUploadProps = {
   onBack: () => void;
@@ -37,6 +37,7 @@ export default function PhotoUpload({
 
   function removePhoto() {
     if (preview) URL.revokeObjectURL(preview);
+
     setPhoto(null);
     setPreview(null);
     setError("");
@@ -45,39 +46,34 @@ export default function PhotoUpload({
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto rounded-3xl bg-slate-950 p-5 text-white">
+    <div className="flex h-full w-full flex-col overflow-y-auto rounded-3xl bg-white p-4 font-sans text-slate-900">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="mt-4 flex shrink-0 items-center justify-between">
         <button
           type="button"
           onClick={onBack}
-          className="rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/10"
+    style={{ fontSize: "10px" }}
+          className="flex items-center gap-1 rounded-lg py-2 pr-2 text-xs font-medium text-slate-600 transition hover:text-blue-950"
         >
-          ← Back
+          <ArrowLeft size={17} />
+          Back
         </button>
 
-        <span className="text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
-          SideQuest
-        </span>
       </div>
 
-      {/* Title */}
-      <div className="mb-6 mt-8">
-        <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
-          Quest verification
-        </p>
+      {/* Heading */}
+      <div className="mb-2 mt-5 shrink-0">
+        <div className="mb-2 inline-flex rounded-full px-3 py-1">
+          <span className="text-[16px] font-semibold uppercase tracking-widest text-">
+            Quest verification
+          </span>
+        </div>
 
-        <h1 className="text-2xl font-black uppercase tracking-wide">
-          Upload your photo
-        </h1>
 
-        <p className="mt-2 text-sm leading-6 text-slate-400">
-          Show us your adventure! Upload a photo to prove you've completed
-          your side quest.
-        </p>
+      
       </div>
 
-      {/* Upload area */}
+      {/* Hidden file input */}
       <input
         ref={inputRef}
         type="file"
@@ -89,77 +85,90 @@ export default function PhotoUpload({
         }
       />
 
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className="relative flex min-h-64 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-teal-500/60 bg-teal-500/5 p-4 transition hover:border-teal-400 hover:bg-teal-500/10"
-      >
-        {preview ? (
-          <img
-            src={preview}
-            alt="Selected quest photo preview"
-            className="absolute inset-0 h-full w-full object-contain"
-          />
-        ) : (
-          <>
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-teal-500/15 text-teal-400">
-              <ImagePlus size={30} />
-            </div>
-
-            <span className="text-sm font-bold">
-              Choose a photo
-            </span>
-
-            <span className="mt-2 text-xs text-slate-400">
-              Tap to browse your images or take a photo
-            </span>
-
-            <span className="mt-4 text-[10px] uppercase tracking-wider text-slate-500">
-              JPG, PNG, or other image formats · Max 10 MB
-            </span>
-          </>
-        )}
-      </button>
-
-      {preview && (
-        <div className="mt-3 flex items-center justify-between rounded-xl bg-white/5 p-3">
-          <div className="flex min-w-0 items-center gap-2">
-            <Check size={18} className="shrink-0 text-teal-400" />
-            <span className="truncate text-xs text-slate-300">
-              {photo?.name}
-            </span>
+      {/* Photo upload card */}
+      <div className="shrink-0 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-800">
+              Your quest photo
+            </h2>
+            <p className="mt-1 text-[11px] text-slate-500">
+              JPG, PNG · Up to 10 MB
+            </p>
           </div>
 
-          <button
-            type="button"
-            onClick={removePhoto}
-            aria-label="Remove photo"
-            className="ml-2 rounded-lg p-2 text-slate-400 hover:bg-white/10 hover:text-white"
-          >
-            <X size={18} />
-          </button>
+          {preview && (
+            <button
+              type="button"
+              onClick={removePhoto}
+              aria-label="Remove photo"
+              className="rounded-full p-2 text-slate-500 transition hover:bg-slate-200 hover:text-blue-950"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
-      )}
 
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="relative flex h-44 w-full flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-8 border-blue-800 bg-blue-100 transition hover:border-blue-800 hover:bg-blue-50/40"
+        >
+          {preview ? (
+            <img
+              src={preview}
+              alt="Selected quest photo preview"
+              className="absolute inset-0 h-full w-full object-contain"
+            />
+          ) : (
+            <>
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-300 text-blue-450">
+                <ImagePlus size={24} strokeWidth={1.8} />
+              </div>
+
+              <span className="text-sm font-semibold text-[#3b4cca]">
+                Add a photo
+              </span>
+
+              <span className="mt-1 text-xs text-slate-500">
+                Browse files or take a picture
+              </span>
+            </>
+          )}
+        </button>
+
+        {photo && (
+          <div className="mt-3 flex items-center gap-2 rounded-lg bg-white p-2">
+            <Check size={16} className="shrink-0 text-blue-900" />
+            <span className="truncate text-xs text-slate-600">
+              {photo.name}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Error message */}
       {error && (
-        <p role="alert" className="mt-3 text-sm text-red-400">
+        <p role="alert" className="mt-2 text-xs text-red-600">
           {error}
         </p>
       )}
 
-      {/* Submit */}
-      <div className="mt-auto pt-6">
+      {/* Bottom action */}
+      <div className="mt-auto shrink-0 pt-5">
         <button
           type="button"
           disabled={!photo}
-          onClick={() => photo && onSubmit(photo)}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#008080] px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-white transition hover:bg-[#006666] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+          onClick={() => {
+            if (photo) onSubmit(photo);
+          }}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-300"
         >
-          <Upload size={18} />
-          Submit Photo
+          <Upload size={17} />
+          Submit photo
         </button>
 
-        <p className="mt-3 text-center text-[10px] text-slate-500">
+        <p className="mt-3 text-center text-[10px] leading-4 text-slate-400">
           Your photo will be submitted for quest verification.
         </p>
       </div>
