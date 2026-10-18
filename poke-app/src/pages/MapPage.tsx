@@ -1,13 +1,44 @@
-
 import { useRef, useState } from "react";
+import { MapPin } from "lucide-react";
+import SideQuestModal from "../components/SideQuestModal";
 
 const WORLD_WIDTH = 5600 / 2;
 const WORLD_HEIGHT = 4320 / 2;
 
 const quests = [
-  { id: 1, name: "Hidden Cafe", x: 350, y: 400 },
-  { id: 2, name: "Park Challenge", x: 1200, y: 700 },
-  { id: 3, name: "Secret Spot", x: 800, y: 1500 },
+  {
+    id: 1,
+    title: "Find Buzz and Take a Photo",
+    description:
+      "Find Buzz and take a photo together to complete this campus challenge!",
+    difficulty: "Easy",
+    reward: "50 XP",
+    location: "Georgia Tech Campus",
+    x: 1685,
+    y: 1430,
+  },
+  {
+    id: 2,
+    title: "Buy Coffee from Kaldi's Coffee",
+    description:
+      "Visit Kaldi's Coffee and buy a coffee to complete this caffeine-fueled side quest.",
+    difficulty: "Easy",
+    reward: "75 XP",
+    location: "Kaldi's Coffee",
+    x: 1845,
+    y: 1495,
+  },
+  {
+    id: 3,
+    title: "Take an Exercise Class at the CRC",
+    description:
+      "Head to the Campus Recreation Center and take an exercise class to complete this fitness challenge.",
+    difficulty: "Medium",
+    reward: "100 XP",
+    location: "Campus Recreation Center (CRC)",
+    x: 545,
+    y: 1210,
+  },
 ];
 
 type MapPageProps = {
@@ -15,6 +46,10 @@ type MapPageProps = {
 };
 
 export default function MapPage({ onOpenProfile }: MapPageProps) {
+  const [selectedQuest, setSelectedQuest] = useState<
+    (typeof quests)[number] | null
+  >(null);
+
   const viewportRef = useRef<HTMLDivElement>(null);
 
   const [zoom, setZoom] = useState(1);
@@ -47,7 +82,6 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
 
     if (!viewport) return;
 
-    // Zoom toward the center of the visible screen
     const centerX = viewport.clientWidth / 2;
     const centerY = viewport.clientHeight / 2;
 
@@ -62,7 +96,6 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
   }
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    // Don't start dragging when interacting with a quest marker
     if ((e.target as HTMLElement).closest("button")) return;
 
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -99,7 +132,7 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
       ref={viewportRef}
       className="relative h-full w-full overflow-hidden rounded-3xl bg-slate-200 touch-none"
     >
-      {/* Moving world */}
+      {/* Moving map world */}
       <div
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -122,16 +155,17 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
           <button
             key={quest.id}
             onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => alert(quest.name)}
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-600 px-3 py-2 text-sm font-bold text-white shadow-lg"
+            onClick={() => setSelectedQuest(quest)}
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3b4cca] px-3 py-2 text-sm font-bold text-white shadow-lg"
             style={{ left: quest.x, top: quest.y }}
+            aria-label={`Open quest: ${quest.title}`}
           >
-            📍 {quest.name}
+            <MapPin />
           </button>
         ))}
       </div>
 
-      {/* Fixed zoom controls */}
+      {/* Zoom controls */}
       <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2">
         <button
           type="button"
@@ -165,7 +199,7 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
         </div>
       </div>
 
-      {/* Fixed help text */}
+      {/* Map help */}
       <div className="pointer-events-none absolute bottom-4 left-4 z-40 rounded-xl bg-white/90 px-3 py-2 shadow">
         <p className="text-sm font-semibold text-slate-900">
           Explore your world
@@ -173,7 +207,7 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
         <p className="text-xs text-slate-600">Drag to look around</p>
       </div>
 
-      {/* Fixed profile button */}
+      {/* Profile button */}
       <button
         className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-xl shadow-lg"
         onClick={onOpenProfile}
@@ -182,6 +216,26 @@ export default function MapPage({ onOpenProfile }: MapPageProps) {
       >
         <span aria-hidden="true">⚡</span>
       </button>
+
+      {/* Side quest modal: constrained to MapPage */}
+      <SideQuestModal
+        isOpen={selectedQuest !== null}
+        quest={{
+          id: selectedQuest?.id ?? 0,
+          name: selectedQuest?.title ?? "",
+          description: selectedQuest?.description ?? "",
+          difficulty: selectedQuest?.difficulty ?? "",
+          reward: selectedQuest?.reward ?? "",
+          location: selectedQuest?.location ?? "",
+        }}
+        onClose={() => setSelectedQuest(null)}
+        onAccept={() => {
+          if (!selectedQuest) return;
+
+          console.log("Accepted quest:", selectedQuest.title);
+          setSelectedQuest(null);
+        }}
+      />
     </div>
   );
 }
