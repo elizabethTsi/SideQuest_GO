@@ -200,7 +200,7 @@ export default function MapPage({
         aria-label="Map compass"
       >
         <img
-          src="/images/wreck.png"
+          src="/images/ramblin.png"
           alt="Ramblin Wreck Car"
           className="h-14 w-14 shadow-xl"
           style={{
